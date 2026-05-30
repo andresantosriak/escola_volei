@@ -1,0 +1,223 @@
+/* ============================================================
+   ESPORTE RECREAÇÃO — Design Tokens
+   Color + Type foundations for the Esporte Recreação volleyball app
+   Load this anywhere you build an Esporte Recreação surface.
+   Fonts are loaded from Google Fonts (see <link> in HTML files):
+     Archivo  — display / headlines / big stats (jersey feel)
+     Barlow   — body, UI, labels, tabular numbers
+   ============================================================ */
+
+/* ---- Fonts (CDN fallback import; prefer <link> in <head>) ---- */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap');
+
+:root {
+  /* ============ BRAND / PRIMITIVE COLORS ============ */
+
+  /* Verde Canarinho — primary. The seleção green. Buttons, links, active states. */
+  --green-50:  #E7F7EE;
+  --green-100: #C4EBD3;
+  --green-200: #8FD9AB;
+  --green-300: #54C57F;
+  --green-400: #1BAE57;
+  --green-500: #009C3B;   /* primary — bandeira green */
+  --green-600: #008733;   /* primary pressed */
+  --green-700: #006B29;
+  --green-800: #00511F;
+  --green-900: #06331A;
+
+  /* Amarelo Ouro — accent. The bandeira yellow. Highlights, ratings, energy. */
+  --yellow-50:  #FFF8D6;
+  --yellow-100: #FFEEA0;
+  --yellow-300: #FFDD3D;
+  --yellow-400: #FFCB00;   /* accent — bandeira yellow */
+  --yellow-500: #F0BC00;   /* accent pressed */
+  --yellow-600: #C99A00;
+
+  /* Azul Bandeira — deep navy. Premium player-card surfaces, dark mode. */
+  --ink-900: #03112E;
+  --ink-800: #07204F;   /* player-card base */
+  --ink-700: #002776;   /* bandeira blue */
+  --ink-600: #1A3C92;
+  --ink-500: #3055B0;
+
+  /* Neutrals — cool gray ramp for UI chrome. */
+  --gray-0:   #FFFFFF;
+  --gray-25:  #FBFCFE;
+  --gray-50:  #F4F6FB;
+  --gray-100: #EAEEF5;
+  --gray-200: #DCE2EC;
+  --gray-300: #C2CAD8;
+  --gray-400: #97A1B4;
+  --gray-500: #6B7488;
+  --gray-600: #4C5466;
+  --gray-700: #353C4D;
+  --gray-800: #232936;
+  --gray-900: #141821;
+
+  /* ============ SEMANTIC / STATE COLORS ============ */
+
+  /* Win / Present — green (shares the brand family; positivity is on-brand) */
+  --win-bg:   #E4F6EB;
+  --win-300:  #54C57F;
+  --win-500:  #00913A;   /* presente, vitória */
+  --win-700:  #006B29;
+
+  /* Loss / Absent — red */
+  --loss-bg:  #FDEAEA;
+  --loss-300: #F49497;
+  --loss-500: #E5484D;   /* falta, derrota */
+  --loss-700: #B4282D;
+
+  /* Late / Warning — orange (kept clear of the canary accent yellow) */
+  --warn-bg:  #FFF0DD;
+  --warn-300: #FFB861;
+  --warn-500: #F08C00;   /* atraso, atenção */
+  --warn-700: #A85A00;
+
+  /* Balance / Info — bandeira blue (team equilibrium indicator) */
+  --bal-bg:   #E6ECFB;
+  --bal-500:  #1A3C92;
+  --bal-700:  #002776;
+
+  /* ============ SEMANTIC SURFACE / TEXT ROLES ============ */
+  --bg-app:        var(--gray-50);     /* app background */
+  --bg-surface:    var(--gray-0);      /* cards, sheets */
+  --bg-raised:     var(--gray-0);
+  --bg-sunken:     var(--gray-100);
+  --bg-ink:        var(--ink-800);     /* dark/premium surface */
+
+  --fg-1: #10131C;   /* primary text */
+  --fg-2: #4C5466;   /* secondary text */
+  --fg-3: #6B7488;   /* tertiary / captions */
+  --fg-4: #97A1B4;   /* disabled / hints */
+  --fg-on-green:  #FFFFFF;
+  --fg-on-ink:    #EEF1FA;
+  --fg-on-yellow: #2A1E00;
+
+  --border-1: #EAEEF5;   /* hairline */
+  --border-2: #DCE2EC;   /* default */
+  --border-3: #C2CAD8;   /* strong / focus ring base */
+  --focus-ring: var(--green-400);
+
+  /* ============ TYPE ============ */
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body:    'Barlow', system-ui, sans-serif;
+  --font-stat:    'Barlow Semi Condensed', 'Barlow', sans-serif;
+  --font-num:     'Archivo', system-ui, sans-serif; /* big rating numbers, tabular */
+
+  /* Type scale (mobile-first) */
+  --text-display:  44px;  /* hero rating / big numbers */
+  --text-h1:       28px;
+  --text-h2:       22px;
+  --text-h3:       18px;
+  --text-body:     16px;  /* base */
+  --text-sm:       14px;
+  --text-xs:       12px;
+  --text-micro:    11px;  /* overline labels */
+
+  --lh-tight:  1.05;
+  --lh-snug:   1.2;
+  --lh-normal: 1.45;
+
+  --tracking-display: -0.02em;
+  --tracking-tight:   -0.01em;
+  --tracking-label:    0.06em;  /* uppercase overlines */
+
+  /* ============ SPACING (4pt base) ============ */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 32px;
+  --sp-8: 40px;
+  --sp-9: 56px;
+
+  /* ============ RADII ============ */
+  --r-sm:   8px;
+  --r-md:   12px;
+  --r-lg:   16px;   /* cards */
+  --r-xl:   22px;   /* large cards, sheets */
+  --r-2xl:  28px;   /* player card */
+  --r-pill: 999px;
+
+  /* ============ SHADOWS / ELEVATION ============ */
+  --shadow-sm:  0 1px 2px rgba(16,19,28,0.06), 0 1px 1px rgba(16,19,28,0.04);
+  --shadow-md:  0 4px 12px rgba(16,19,28,0.08), 0 2px 4px rgba(16,19,28,0.04);
+  --shadow-lg:  0 12px 28px rgba(16,19,28,0.12), 0 4px 8px rgba(16,19,28,0.06);
+  --shadow-cta: 0 8px 20px rgba(0,156,59,0.32);
+  --shadow-card: 0 18px 40px rgba(11,15,31,0.35);  /* premium player card */
+
+  /* ============ MOTION ============ */
+  --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+
+  /* Min touch target — one-handed, court use */
+  --touch-min: 48px;
+}
+
+/* ============ SEMANTIC TEXT CLASSES ============ */
+.q-display {
+  font-family: var(--font-num);
+  font-weight: 900;
+  font-size: var(--text-display);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  color: var(--fg-1);
+}
+.q-h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-h1);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+.q-h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-h2);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+.q-h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-h3);
+  line-height: var(--lh-snug);
+  color: var(--fg-1);
+}
+.q-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--text-body);
+  line-height: var(--lh-normal);
+  color: var(--fg-1);
+}
+.q-sm {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  line-height: var(--lh-normal);
+  color: var(--fg-2);
+}
+.q-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-micro);
+  line-height: 1;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.q-stat {
+  font-family: var(--font-stat);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-1);
+}

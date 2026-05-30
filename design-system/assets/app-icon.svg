@@ -1,0 +1,15 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esporte Recreação app icon">
+  <defs>
+    <linearGradient id="qbg" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#009C3B"></stop>
+      <stop offset="1" stop-color="#006B29"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="28" fill="url(#qbg)"></rect>
+  <g fill="none" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round">
+    <path d="M60 18 C 49 39, 49 81, 60 102"></path>
+    <path d="M22 41 C 43 53, 47 80, 37 100"></path>
+    <path d="M98 41 C 77 53, 73 80, 83 100"></path>
+  </g>
+  <circle cx="60" cy="60" r="7.5" fill="#FFC400"></circle>
+</svg>

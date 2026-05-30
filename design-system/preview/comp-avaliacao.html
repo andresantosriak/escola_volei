@@ -1,0 +1,35 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-0);padding:22px 24px;color:var(--fg-1)}
+  .cap{font-family:var(--font-display);font-weight:800;font-size:14px;margin:0 0 14px}
+  .grp{margin-bottom:18px}
+  .tag{font-size:10px;color:var(--fg-4);font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px}
+  /* stepper */
+  .step{display:flex;align-items:center;gap:14px}
+  .nm{font-weight:600;font-size:15px;width:108px}
+  .ctrl{display:inline-flex;align-items:center;gap:14px;background:var(--gray-50);border-radius:999px;padding:4px}
+  .rnd{width:40px;height:40px;border-radius:50%;border:0;background:var(--gray-0);box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;color:var(--green-600);cursor:pointer}
+  .rnd svg{width:20px;height:20px}
+  .val{font-family:var(--font-num);font-weight:900;font-size:24px;width:24px;text-align:center}
+  /* 1-5 chips */
+  .scale{display:inline-flex;gap:8px}
+  .s{width:42px;height:42px;border-radius:12px;border:1.5px solid var(--border-2);background:var(--gray-0);font-family:var(--font-num);font-weight:800;font-size:18px;color:var(--fg-3);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .s.on{background:var(--green-500);border-color:var(--green-500);color:#fff}
+</style></head>
+<body>
+  <p class="cap">Controle de avaliação</p>
+  <div class="grp">
+    <p class="tag">Stepper +/− · ajuste de fundamento</p>
+    <div class="step"><span class="nm">Ataque</span>
+      <div class="ctrl"><button class="rnd"><i data-lucide="minus"></i></button><span class="val">4</span><button class="rnd"><i data-lucide="plus"></i></button></div>
+    </div>
+  </div>
+  <div class="grp">
+    <p class="tag">Escala 1–5 · engajamento do dia</p>
+    <div class="scale"><span class="s">1</span><span class="s">2</span><span class="s">3</span><span class="s on">4</span><span class="s">5</span></div>
+  </div>
+  <script>lucide.createIcons();</script>
+</body></html>

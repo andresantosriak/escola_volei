@@ -1,0 +1,68 @@
+{
+  "module": "01-auth",
+  "pass": 9,
+  "warn": 1,
+  "fail": 0,
+  "steps": [
+    {
+      "name": "Rota protegida (/) sem sessão redireciona p/ login",
+      "status": "pass",
+      "detail": "",
+      "ms": 455
+    },
+    {
+      "name": "Login mostra campos e-mail + senha",
+      "status": "pass",
+      "detail": "email=1 senha=1",
+      "ms": null
+    },
+    {
+      "name": "Validação de campos vazios (Zod)",
+      "status": "pass",
+      "detail": "mensagens exibidas",
+      "ms": null
+    },
+    {
+      "name": "Login com senha errada → erro amigável",
+      "status": "pass",
+      "detail": "toast de erro",
+      "ms": 2540
+    },
+    {
+      "name": "Link \"Criar conta\" → /register",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Link \"Esqueci a senha\" → /forgot-password",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Login correto → Home",
+      "status": "pass",
+      "detail": "",
+      "ms": 1175
+    },
+    {
+      "name": "Sessão persiste após reload (não volta p/ login)",
+      "status": "pass",
+      "detail": "http://localhost:5173/",
+      "ms": null
+    },
+    {
+      "name": "Logout → volta p/ login",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Console limpo no fluxo de auth",
+      "status": "warn",
+      "detail": "1 erro(s)",
+      "ms": null
+    }
+  ]
+}

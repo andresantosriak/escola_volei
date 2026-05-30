@@ -1,0 +1,23 @@
+<!-- @dsCard group="Spacing" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-0);padding:22px 24px;color:var(--fg-1)}
+  .cap{font-family:var(--font-display);font-weight:800;font-size:14px;margin:0 0 14px}
+  .row{display:flex;gap:16px;align-items:flex-end}
+  .item{display:flex;flex-direction:column;align-items:center;gap:8px;flex:1}
+  .box{width:100%;height:64px;background:var(--green-50);border:2px solid var(--green-500)}
+  .nm{font-size:11px;font-weight:700}
+  .vl{font-size:10px;color:var(--fg-3)}
+</style></head>
+<body>
+  <p class="cap">Corner radii</p>
+  <div class="row">
+    <div class="item"><div class="box" style="border-radius:8px"></div><span class="nm">sm</span><span class="vl">8px · controls</span></div>
+    <div class="item"><div class="box" style="border-radius:12px"></div><span class="nm">md</span><span class="vl">12px · inputs</span></div>
+    <div class="item"><div class="box" style="border-radius:16px"></div><span class="nm">lg</span><span class="vl">16px · cards</span></div>
+    <div class="item"><div class="box" style="border-radius:22px"></div><span class="nm">xl</span><span class="vl">22px · sheets</span></div>
+    <div class="item"><div class="box" style="border-radius:28px"></div><span class="nm">2xl</span><span class="vl">28px · player card</span></div>
+    <div class="item"><div class="box" style="border-radius:999px;width:64px"></div><span class="nm">pill</span><span class="vl">chips</span></div>
+  </div>
+</body></html>

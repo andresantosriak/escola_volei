@@ -1,0 +1,256 @@
+@import 'tailwindcss';
+
+/* Dark mode via [data-theme="dark"] (class strategy) */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* =====================================================================
+   ESPORTE RECREAÇÃO — Design Tokens
+   Valores 100% fiéis a design-system/colors_and_type.css (fonte de verdade).
+   Paleta da seleção: verde / amarelo / azul.
+   ===================================================================== */
+@theme {
+  --breakpoint-xs: 24rem;
+
+  /* ---- Verde Canarinho (primary) ---- */
+  --color-green-50: #e7f7ee;
+  --color-green-100: #c4ebd3;
+  --color-green-200: #8fd9ab;
+  --color-green-300: #54c57f;
+  --color-green-400: #1bae57;
+  --color-green-500: #009c3b;
+  --color-green-600: #008733;
+  --color-green-700: #006b29;
+  --color-green-800: #00511f;
+  --color-green-900: #06331a;
+
+  /* ---- Amarelo Ouro (accent) ---- */
+  --color-yellow-50: #fff8d6;
+  --color-yellow-100: #ffeea0;
+  --color-yellow-300: #ffdd3d;
+  --color-yellow-400: #ffcb00;
+  --color-yellow-500: #f0bc00;
+  --color-yellow-600: #c99a00;
+
+  /* ---- Azul Bandeira (ink / premium) ---- */
+  --color-ink-500: #3055b0;
+  --color-ink-600: #1a3c92;
+  --color-ink-700: #002776;
+  --color-ink-800: #07204f;
+  --color-ink-900: #03112e;
+
+  /* ---- Neutrals ---- */
+  --color-gray-0: #ffffff;
+  --color-gray-25: #fbfcfe;
+  --color-gray-50: #f4f6fb;
+  --color-gray-100: #eaeef5;
+  --color-gray-200: #dce2ec;
+  --color-gray-300: #c2cad8;
+  --color-gray-400: #97a1b4;
+  --color-gray-500: #6b7488;
+  --color-gray-600: #4c5466;
+  --color-gray-700: #353c4d;
+  --color-gray-800: #232936;
+  --color-gray-900: #141821;
+
+  /* ---- Semantic states (com bg/300/500/700 do DS) ---- */
+  --color-win-bg: #e4f6eb;
+  --color-win-300: #54c57f;
+  --color-win-500: #00913a;
+  --color-win-700: #006b29;
+  --color-loss-bg: #fdeaea;
+  --color-loss-300: #f49497;
+  --color-loss-500: #e5484d;
+  --color-loss-700: #b4282d;
+  --color-warn-bg: #fff0dd;
+  --color-warn-300: #ffb861;
+  --color-warn-500: #f08c00;
+  --color-warn-700: #a85a00;
+  --color-bal-bg: #e6ecfb;
+  --color-bal-500: #1a3c92;
+  --color-bal-700: #002776;
+  /* aliases curtos (compat com classes text-win/bg-loss já usadas) */
+  --color-win: #00913a;
+  --color-loss: #e5484d;
+  --color-warn: #f08c00;
+  --color-bal: #1a3c92;
+
+  /* ---- Role tokens (remapeados por tema nas CSS vars abaixo) ---- */
+  --color-app: var(--app);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-sunken: var(--sunken);
+  --color-ink-surface: var(--ink-surface);
+  --color-border-1: var(--border-1);
+  --color-border-2: var(--border-2);
+  --color-border-3: var(--border-3);
+  --color-fg-1: var(--fg-1);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-fg-4: var(--fg-4);
+  --color-ring: var(--ring-color);
+
+  /* ---- Tipografia ---- */
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-stat: 'Barlow Semi Condensed', 'Barlow', system-ui, sans-serif;
+  --font-num: 'Archivo', system-ui, sans-serif;
+
+  /* ---- Radii (sm 8 · md 12 · lg 16 · xl 22 · 2xl 28 · pill 999) ---- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
+
+  /* ---- Shadows (exatas do DS) ---- */
+  --shadow-sm: 0 1px 2px rgba(16, 19, 28, 0.06), 0 1px 1px rgba(16, 19, 28, 0.04);
+  --shadow-md: 0 4px 12px rgba(16, 19, 28, 0.08), 0 2px 4px rgba(16, 19, 28, 0.04);
+  --shadow-lg: 0 12px 28px rgba(16, 19, 28, 0.12), 0 4px 8px rgba(16, 19, 28, 0.06);
+  --shadow-cta: 0 8px 20px rgba(0, 156, 59, 0.32);
+  --shadow-card: 0 18px 40px rgba(11, 15, 31, 0.35);
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---- Role tokens: LIGHT (exatos do DS) ---- */
+:root {
+  --app: #f4f6fb; /* gray-50 / bg-app */
+  --surface: #ffffff; /* gray-0 / bg-surface */
+  --surface-2: #f4f6fb;
+  --sunken: #eaeef5; /* gray-100 / bg-sunken */
+  --ink-surface: #07204f; /* ink-800 / bg-ink (player card base) */
+  --border-1: #eaeef5; /* hairline */
+  --border-2: #dce2ec; /* default */
+  --border-3: #c2cad8; /* strong */
+  --fg-1: #10131c;
+  --fg-2: #4c5466;
+  --fg-3: #6b7488;
+  --fg-4: #97a1b4;
+  --ring-color: #1bae57; /* green-400 / focus-ring */
+}
+
+/* ---- Role tokens: DARK (navy surfaces, brand realçado, nunca preto puro) ---- */
+[data-theme='dark'] {
+  --app: #0b1220;
+  --surface: #141d2e;
+  --surface-2: #1b263b;
+  --sunken: #0b1220;
+  --ink-surface: #07204f;
+  --border-1: #2a3650;
+  --border-2: #36456a;
+  --border-3: #44557f;
+  --fg-1: #f2f5f9;
+  --fg-2: #c2ccd9;
+  --fg-3: #8a99ac;
+  --fg-4: #5d6b80;
+  --ring-color: #1bae57;
+  --shadow-sm: none;
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.55);
+  --shadow-cta: 0 6px 18px rgba(0, 156, 59, 0.4);
+}
+
+/* ---- Base ---- */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--fg-1);
+  background: var(--app);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Type scale (valores exatos do DS) ---- */
+@layer components {
+  .q-display {
+    font-family: var(--font-num);
+    font-weight: 900;
+    font-size: 44px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .q-h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .q-h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .q-h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+  .q-body {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .q-body-strong {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .q-sm {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--fg-2);
+  }
+  .q-label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+  }
+  .q-stat {
+    font-family: var(--font-stat);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+}
+
+/* ---- Animations ---- */
+@keyframes sheetUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

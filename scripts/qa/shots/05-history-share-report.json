@@ -1,0 +1,80 @@
+{
+  "module": "05-history-share",
+  "pass": 12,
+  "warn": 0,
+  "fail": 0,
+  "steps": [
+    {
+      "name": "Login do coach de QA",
+      "status": "pass",
+      "detail": "qa.bot@gmail.com",
+      "ms": 2238
+    },
+    {
+      "name": "Histórico lista partida registrada",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Abrir detalhe da partida",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Detalhe mostra placar set-a-set",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Detalhe mostra equilíbrio da montagem",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Detalhe mostra elencos dos times",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Detalhe → tela Compartilhar",
+      "status": "pass",
+      "detail": "",
+      "ms": 50
+    },
+    {
+      "name": "Trocar formato p/ Vertical",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Trocar tema p/ Escuro",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Toggle de conteúdo (elencos)",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Compartilhar player card do aluno",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Console limpo no fluxo de histórico/share",
+      "status": "pass",
+      "detail": "0 erro(s)",
+      "ms": null
+    }
+  ]
+}

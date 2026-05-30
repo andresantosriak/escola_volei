@@ -1,0 +1,43 @@
+<!-- @dsCard group="Colors" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-0);padding:22px 24px;color:var(--fg-1)}
+  .cap{font-family:var(--font-display);font-weight:800;font-size:15px;margin:0 0 4px}
+  .sub{color:var(--fg-3);font-size:12px;margin:0 0 16px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .cell{border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+  .dot{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff}
+  .nm{font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px}
+  .hex{font-size:10.5px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+  .use{font-size:11px;color:var(--fg-2)}
+  svg{width:20px;height:20px}
+</style></head>
+<body>
+  <p class="cap">State colors</p>
+  <p class="sub">Always paired with an icon + text — never color alone.</p>
+  <div class="grid">
+    <div class="cell" style="background:var(--win-bg)">
+      <div class="dot" style="background:var(--win-500)"><i data-lucide="user-check"></i></div>
+      <div class="nm">Presente / Vitória</div>
+      <div class="use">Verde · #00913A</div>
+    </div>
+    <div class="cell" style="background:var(--loss-bg)">
+      <div class="dot" style="background:var(--loss-500)"><i data-lucide="user-x"></i></div>
+      <div class="nm">Falta / Derrota</div>
+      <div class="use">Vermelho · #E5484D</div>
+    </div>
+    <div class="cell" style="background:var(--warn-bg)">
+      <div class="dot" style="background:var(--warn-500)"><i data-lucide="clock"></i></div>
+      <div class="nm">Atraso / Atenção</div>
+      <div class="use">Laranja · #F08C00</div>
+    </div>
+    <div class="cell" style="background:var(--bal-bg)">
+      <div class="dot" style="background:var(--bal-500)"><i data-lucide="scale"></i></div>
+      <div class="nm">Equilíbrio</div>
+      <div class="use">Azul · #1A3C92</div>
+    </div>
+  </div>
+  <script>lucide.createIcons();</script>
+</body></html>

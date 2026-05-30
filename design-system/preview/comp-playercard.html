@@ -1,0 +1,46 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-100);padding:24px;color:var(--fg-1);display:flex;justify-content:center}
+  .pcard{width:300px;border-radius:28px;padding:20px;color:var(--fg-on-ink);position:relative;overflow:hidden;
+    background:radial-gradient(120% 90% at 80% 0%, #009C3B 0%, #07204F 48%, #03112E 100%);
+    box-shadow:var(--shadow-card)}
+  .sheen{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.10),transparent 42%);pointer-events:none}
+  .hd{display:flex;justify-content:space-between;align-items:flex-start;position:relative}
+  .rate{display:flex;flex-direction:column;align-items:center;line-height:.9}
+  .rate .n{font-family:var(--font-num);font-weight:900;font-size:52px;letter-spacing:-.03em;color:var(--yellow-400)}
+  .rate .l{font-family:var(--font-body);font-weight:700;font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.7)}
+  .pos{align-self:flex-start;background:var(--yellow-400);color:#2A1E00;font-family:var(--font-display);font-weight:800;font-size:12px;letter-spacing:.04em;padding:5px 11px;border-radius:999px}
+  .av{width:96px;height:96px;border-radius:50%;margin:6px auto 8px;background:linear-gradient(160deg,#1BAE57,#006B29);display:flex;align-items:center;justify-content:center;font-family:var(--font-num);font-weight:900;font-size:38px;color:#fff;border:3px solid rgba(255,255,255,.25);position:relative}
+  .nm{text-align:center;font-family:var(--font-display);font-weight:800;font-size:22px;position:relative}
+  .meta{text-align:center;font-size:11px;color:rgba(255,255,255,.6);margin-bottom:14px;position:relative}
+  .attrs{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px;position:relative}
+  .at{display:flex;align-items:center;gap:8px}
+  .at .k{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(255,255,255,.65);width:42px}
+  .at .v{font-family:var(--font-num);font-weight:900;font-size:14px;width:18px;text-align:right}
+  .at .bar{flex:1;height:5px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden}
+  .at .bar i{display:block;height:100%;background:var(--yellow-400);border-radius:999px}
+</style></head>
+<body>
+  <div class="pcard">
+    <div class="sheen"></div>
+    <div class="hd">
+      <div class="rate"><span class="n">87</span><span class="l">GERAL</span></div>
+      <span class="pos">LEVANTADOR</span>
+    </div>
+    <div class="av">BR</div>
+    <div class="nm">Bruno Almeida</div>
+    <div class="meta">16 anos · 1,82 m · destro · 12V 4D</div>
+    <div class="attrs">
+      <div class="at"><span class="k">Saq</span><span class="bar"><i style="width:80%"></i></span><span class="v">4</span></div>
+      <div class="at"><span class="k">Atq</span><span class="bar"><i style="width:90%"></i></span><span class="v">5</span></div>
+      <div class="at"><span class="k">Rec</span><span class="bar"><i style="width:70%"></i></span><span class="v">4</span></div>
+      <div class="at"><span class="k">Lev</span><span class="bar"><i style="width:100%"></i></span><span class="v">5</span></div>
+      <div class="at"><span class="k">Bloq</span><span class="bar"><i style="width:60%"></i></span><span class="v">3</span></div>
+      <div class="at"><span class="k">Def</span><span class="bar"><i style="width:80%"></i></span><span class="v">4</span></div>
+    </div>
+  </div>
+  <script>lucide.createIcons();</script>
+</body></html>

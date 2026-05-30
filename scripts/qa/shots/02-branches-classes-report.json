@@ -1,0 +1,80 @@
+{
+  "module": "02-branches-classes",
+  "pass": 12,
+  "warn": 0,
+  "fail": 0,
+  "steps": [
+    {
+      "name": "Login do coach de QA",
+      "status": "pass",
+      "detail": "qa.bot@gmail.com",
+      "ms": 2256
+    },
+    {
+      "name": "Abrir Filiais",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Form de nova filial abre",
+      "status": "pass",
+      "detail": "",
+      "ms": 579
+    },
+    {
+      "name": "Validação: filial sem nome bloqueia",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Criar filial (POST + toast de sucesso)",
+      "status": "pass",
+      "detail": "Filial QA 44204",
+      "ms": 426
+    },
+    {
+      "name": "Detalhe da filial mostra dados (InfoRow)",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Editar filial e salvar",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Abrir Turmas",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Criar turma vinculada à filial (POST + toast)",
+      "status": "pass",
+      "detail": "Turma QA 44204",
+      "ms": 434
+    },
+    {
+      "name": "Detalhe da turma mostra seção de alunos",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "RN06: excluir filial com turma ativa é bloqueado",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Console limpo no fluxo de gestão",
+      "status": "pass",
+      "detail": "0 erro(s)",
+      "ms": null
+    }
+  ]
+}

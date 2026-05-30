@@ -1,0 +1,80 @@
+{
+  "module": "06-config",
+  "pass": 12,
+  "warn": 0,
+  "fail": 0,
+  "steps": [
+    {
+      "name": "Login do coach de QA",
+      "status": "pass",
+      "detail": "qa.bot@gmail.com",
+      "ms": 1751
+    },
+    {
+      "name": "Abrir Fundamentos (técnicos + comportamentais)",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Toggle \"Mostrar pesos\" revela sliders",
+      "status": "pass",
+      "detail": "10 sliders",
+      "ms": null
+    },
+    {
+      "name": "Ativar/desativar um fundamento",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Abrir Configurações",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Configurações mostra e-mail da conta",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Trocar tema p/ Escuro aplica data-theme=dark",
+      "status": "pass",
+      "detail": "",
+      "ms": 736
+    },
+    {
+      "name": "Tema Escuro persiste após reload",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Voltar p/ tema Claro",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Alterar preferência de treino (select) persiste",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Exportar CSV dispara download",
+      "status": "pass",
+      "detail": "alunos-esporte-recreacao.csv",
+      "ms": null
+    },
+    {
+      "name": "Console limpo no fluxo de config",
+      "status": "pass",
+      "detail": "0 erro(s)",
+      "ms": null
+    }
+  ]
+}

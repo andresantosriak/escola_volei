@@ -1,0 +1,56 @@
+{
+  "module": "03-students",
+  "pass": 8,
+  "warn": 0,
+  "fail": 0,
+  "steps": [
+    {
+      "name": "Login do coach de QA",
+      "status": "pass",
+      "detail": "qa.bot@gmail.com",
+      "ms": 2340
+    },
+    {
+      "name": "Abrir Alunos",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Criar 6 alunos",
+      "status": "pass",
+      "detail": "6/6, 1º em 1242ms",
+      "ms": null
+    },
+    {
+      "name": "Perfil abre na aba Dados",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Aba Desempenho mostra player card (GERAL)",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "RN11: amostra insuficiente (aluno sem partidas)",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Alternar ordenação (nome ↔ nota)",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Console limpo no fluxo de alunos",
+      "status": "pass",
+      "detail": "0 erro(s)",
+      "ms": null
+    }
+  ]
+}

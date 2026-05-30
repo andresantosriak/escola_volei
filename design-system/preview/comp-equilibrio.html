@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-0);padding:22px 24px;color:var(--fg-1)}
+  .cap{font-family:var(--font-display);font-weight:800;font-size:14px;margin:0 0 14px}
+  .ind{background:var(--gray-50);border-radius:16px;padding:16px 18px;margin-bottom:12px}
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .ttl{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px}
+  .ttl svg{width:18px;height:18px;color:var(--bal-500)}
+  .pct{font-family:var(--font-num);font-weight:900;font-size:22px}
+  .bar{height:12px;border-radius:999px;background:var(--gray-200);overflow:hidden;display:flex}
+  .fill{height:100%;background:var(--bal-500)}
+  .lo .fill{background:var(--warn-500)}
+  .lo .pct{color:var(--warn-700)}
+  .hint{font-size:11px;color:var(--fg-3);margin-top:8px}
+</style></head>
+<body>
+  <p class="cap">Indicador de equilíbrio</p>
+  <div class="ind">
+    <div class="top"><span class="ttl"><i data-lucide="scale"></i>Times equilibrados</span><span class="pct" style="color:var(--bal-700)">94%</span></div>
+    <div class="bar"><div class="fill" style="width:94%"></div></div>
+    <p class="hint">Cada fundamento dividido de forma parelha · ambos os times têm levantador.</p>
+  </div>
+  <div class="ind lo">
+    <div class="top"><span class="ttl"><i data-lucide="alert-triangle" style="color:var(--warn-500)"></i>Pode melhorar</span><span class="pct">68%</span></div>
+    <div class="bar"><div class="fill" style="width:68%"></div></div>
+    <p class="hint">Time Azul concentra os melhores ataques. Toque em "Reequilibrar".</p>
+  </div>
+  <script>lucide.createIcons();</script>
+</body></html>

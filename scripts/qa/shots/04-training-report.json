@@ -1,0 +1,110 @@
+{
+  "module": "04-training",
+  "pass": 17,
+  "warn": 0,
+  "fail": 0,
+  "steps": [
+    {
+      "name": "Login do coach de QA",
+      "status": "pass",
+      "detail": "qa.bot@gmail.com",
+      "ms": 1703
+    },
+    {
+      "name": "Home lista turma de treino",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Botão \"Iniciar treino\" habilita ao selecionar turma",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Iniciar treino → tela de Chamada",
+      "status": "pass",
+      "detail": "",
+      "ms": 466
+    },
+    {
+      "name": "Contador inicia 7/7 (todos presentes por padrão)",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Marcar 1 falta → contador 6/7",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Chamada → Montar times",
+      "status": "pass",
+      "detail": "",
+      "ms": 39
+    },
+    {
+      "name": "Engine montou times + índice de equilíbrio",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Botão \"Reequilibrar\" gera nova divisão",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Alternar modo Desenvolvimento recalcula",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Montar times → Registrar resultado",
+      "status": "pass",
+      "detail": "",
+      "ms": 39
+    },
+    {
+      "name": "Tela de resultado tem steppers de placar",
+      "status": "pass",
+      "detail": "2 botões +",
+      "ms": null
+    },
+    {
+      "name": "Placar 25×20 → vencedor automático Time A (1×0)",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Adicionar 2º set",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Salvar resultado → avaliação ou histórico",
+      "status": "pass",
+      "detail": "",
+      "ms": 1050
+    },
+    {
+      "name": "Concluir treino → histórico",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Console limpo no fluxo de treino",
+      "status": "pass",
+      "detail": "0 erro(s)",
+      "ms": null
+    }
+  ]
+}

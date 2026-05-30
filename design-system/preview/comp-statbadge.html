@@ -1,0 +1,28 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-0);padding:22px 24px;color:var(--fg-1)}
+  .cap{font-family:var(--font-display);font-weight:800;font-size:14px;margin:0 0 14px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .badge{display:inline-flex;align-items:center;gap:9px;border-radius:12px;padding:10px 14px;font-weight:700}
+  .badge svg{width:18px;height:18px}
+  .b-win{background:var(--win-bg);color:var(--win-700)}
+  .b-loss{background:var(--loss-bg);color:var(--loss-700)}
+  .b-neutral{background:var(--gray-50);color:var(--fg-1);border:1px solid var(--border-1)}
+  .b-blue{background:var(--green-50);color:var(--green-700)}
+  .n{font-family:var(--font-num);font-weight:900;font-size:20px;font-variant-numeric:tabular-nums}
+  .sm{font-size:11px;font-weight:600;opacity:.8}
+</style></head>
+<body>
+  <p class="cap">Badge de stat</p>
+  <div class="row">
+    <span class="badge b-win"><i data-lucide="trophy"></i><span class="n">12V</span></span>
+    <span class="badge b-loss"><span class="n">4D</span></span>
+    <span class="badge b-neutral"><span class="n">75%</span><span class="sm">aproveitamento</span></span>
+    <span class="badge b-blue"><i data-lucide="calendar-check"></i><span class="n">85%</span><span class="sm">presença</span></span>
+    <span class="badge b-neutral"><i data-lucide="flame"></i><span class="n">3</span><span class="sm">vitórias seguidas</span></span>
+  </div>
+  <script>lucide.createIcons();</script>
+</body></html>

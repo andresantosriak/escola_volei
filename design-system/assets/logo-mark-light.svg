@@ -1,0 +1,9 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esporte Recreação mark (light)">
+  <circle cx="60" cy="60" r="52" fill="#FFFFFF"></circle>
+  <g fill="none" stroke="#009C3B" stroke-width="6" stroke-linecap="round">
+    <path d="M60 9 C 49 33, 49 87, 60 111"></path>
+    <path d="M16 38 C 40 52, 44 84, 33 106"></path>
+    <path d="M104 38 C 80 52, 76 84, 87 106"></path>
+  </g>
+  <circle cx="60" cy="60" r="7" fill="#FFC400"></circle>
+</svg>

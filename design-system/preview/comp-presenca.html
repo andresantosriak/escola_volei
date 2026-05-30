@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-50);padding:22px 24px;color:var(--fg-1)}
+  .cap{font-family:var(--font-display);font-weight:800;font-size:14px;margin:0 0 14px}
+  .seg{display:inline-flex;background:var(--gray-0);border:1px solid var(--border-2);border-radius:999px;padding:4px;gap:4px}
+  .opt{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 16px;border-radius:999px;font-weight:700;font-size:14px;color:var(--fg-3)}
+  .opt svg{width:18px;height:18px}
+  .opt.on-p{background:var(--win-500);color:#fff}
+  .opt.on-l{background:var(--loss-500);color:#fff}
+  .opt.on-a{background:var(--warn-500);color:#fff}
+  .stack{display:flex;flex-direction:column;gap:12px}
+  .lbl{font-size:11px;color:var(--fg-3);font-weight:600;width:74px}
+  .ln{display:flex;align-items:center;gap:14px}
+</style></head>
+<body>
+  <p class="cap">Toggle de presença</p>
+  <div class="stack">
+    <div class="ln"><span class="lbl">Presente</span>
+      <div class="seg"><span class="opt on-p"><i data-lucide="check"></i>Presente</span><span class="opt">Falta</span><span class="opt">Atraso</span></div>
+    </div>
+    <div class="ln"><span class="lbl">Falta</span>
+      <div class="seg"><span class="opt">Presente</span><span class="opt on-l"><i data-lucide="x"></i>Falta</span><span class="opt">Atraso</span></div>
+    </div>
+    <div class="ln"><span class="lbl">Atraso</span>
+      <div class="seg"><span class="opt">Presente</span><span class="opt">Falta</span><span class="opt on-a"><i data-lucide="clock"></i>Atraso</span></div>
+    </div>
+  </div>
+  <script>lucide.createIcons();</script>
+</body></html>

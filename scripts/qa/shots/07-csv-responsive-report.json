@@ -1,0 +1,38 @@
+{
+  "module": "07-csv-responsive",
+  "pass": 5,
+  "warn": 0,
+  "fail": 0,
+  "steps": [
+    {
+      "name": "Exportar CSV: download + cabeçalho + dados",
+      "status": "pass",
+      "detail": "alunos-esporte-recreacao.csv, 8 linhas",
+      "ms": null
+    },
+    {
+      "name": "Responsivo @ 320px sem overflow horizontal",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Responsivo @ 375px sem overflow horizontal",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Responsivo @ 390px sem overflow horizontal",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Responsivo @ 428px sem overflow horizontal",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-0);padding:22px 24px;color:var(--fg-1)}
+  .cap{font-family:var(--font-display);font-weight:800;font-size:14px;margin:0 0 14px}
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+  .btn{height:48px;border:0;border-radius:12px;font-family:var(--font-display);font-weight:700;font-size:16px;display:inline-flex;align-items:center;gap:8px;padding:0 22px;cursor:pointer}
+  .btn svg{width:20px;height:20px}
+  .primary{background:var(--green-500);color:#fff;box-shadow:var(--shadow-cta)}
+  .pressed{background:var(--green-600);color:#fff;transform:scale(.97)}
+  .secondary{background:var(--green-50);color:var(--green-700)}
+  .ghost{background:transparent;color:var(--fg-2);border:1.5px solid var(--border-2)}
+  .disabled{background:var(--gray-100);color:var(--fg-4);box-shadow:none}
+  .cta{background:var(--green-500);color:#fff;box-shadow:var(--shadow-cta);width:100%;height:56px;font-size:18px;justify-content:center}
+  .tag{font-size:10px;color:var(--fg-4);font-weight:600}
+</style></head>
+<body>
+  <p class="cap">Buttons</p>
+  <div class="row">
+    <button class="btn primary"><i data-lucide="play"></i>Iniciar treino</button>
+    <button class="btn pressed"><i data-lucide="play"></i>Pressed</button>
+    <button class="btn secondary"><i data-lucide="shuffle"></i>Reequilibrar</button>
+    <button class="btn ghost">Cancelar</button>
+    <button class="btn disabled">Indisponível</button>
+  </div>
+  <button class="btn cta"><i data-lucide="play"></i>Iniciar treino</button>
+  <p class="tag" style="margin-top:8px">Primary CTA — full width, thumb zone, green glow</p>
+  <script>lucide.createIcons();</script>
+</body></html>

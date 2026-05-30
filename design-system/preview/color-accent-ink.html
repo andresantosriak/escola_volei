@@ -1,0 +1,37 @@
+<!-- @dsCard group="Colors" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-0);padding:22px 24px;color:var(--fg-1)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .stack .row{display:flex;border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .sw{flex:1;height:72px;display:flex;flex-direction:column;justify-content:flex-end;padding:8px 9px}
+  .sw b{font-size:12px;font-weight:700}
+  .sw span{font-size:10px;opacity:.85;font-variant-numeric:tabular-nums}
+  .cap{font-family:var(--font-display);font-weight:800;font-size:14px;margin:0 0 9px}
+  .cap em{font-style:normal;color:var(--fg-3);font-weight:600;font-size:11px;margin-left:5px}
+</style></head>
+<body>
+  <div class="grid">
+    <div class="stack">
+      <p class="cap">Amarelo Ouro <em>— accent</em></p>
+      <div class="row">
+        <div class="sw" style="background:var(--yellow-100);color:#7a5b00"><b>100</b><span>#FFEEA0</span></div>
+        <div class="sw" style="background:var(--yellow-300);color:#7a5b00"><b>300</b><span>#FFDD3D</span></div>
+        <div class="sw" style="background:var(--yellow-400);color:#2A1E00"><b>400 ·</b><span>#FFCB00</span></div>
+        <div class="sw" style="background:var(--yellow-500);color:#2A1E00"><b>500</b><span>#F0BC00</span></div>
+        <div class="sw" style="background:var(--yellow-600);color:#fff"><b>600</b><span>#C99A00</span></div>
+      </div>
+    </div>
+    <div class="stack">
+      <p class="cap">Azul Bandeira <em>— premium / dark</em></p>
+      <div class="row">
+        <div class="sw" style="background:var(--ink-500);color:#fff"><b>500</b><span>#3055B0</span></div>
+        <div class="sw" style="background:var(--ink-600);color:#fff"><b>600</b><span>#1A3C92</span></div>
+        <div class="sw" style="background:var(--ink-700);color:#fff"><b>700 ·</b><span>#002776</span></div>
+        <div class="sw" style="background:var(--ink-800);color:#fff"><b>800</b><span>#07204F</span></div>
+        <div class="sw" style="background:var(--ink-900);color:#fff"><b>900</b><span>#03112E</span></div>
+      </div>
+    </div>
+  </div>
+</body></html>

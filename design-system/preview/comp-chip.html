@@ -1,0 +1,30 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;font-family:var(--font-body);background:var(--gray-0);padding:22px 24px;color:var(--fg-1)}
+  .cap{font-family:var(--font-display);font-weight:800;font-size:14px;margin:0 0 4px}
+  .sub{color:var(--fg-3);font-size:11.5px;margin:0 0 16px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .chip{display:inline-flex;align-items:center;gap:9px;background:var(--gray-50);border:1px solid var(--border-1);border-radius:999px;padding:5px 14px 5px 5px;font-weight:600;font-size:14px}
+  .chip.sel{background:var(--green-500);color:#fff;border-color:var(--green-500)}
+  .av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-display);font-weight:800;font-size:13px;flex:none}
+  .pos{font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:999px;background:var(--yellow-400);color:#2A1E00;margin-left:2px}
+  .tag{font-size:10px;color:var(--fg-4);font-weight:600;margin:0 0 6px}
+</style></head>
+<body>
+  <p class="cap">Chip de aluno</p>
+  <p class="sub">Avatar (initials, deterministic color) + name. Used in lists, team rosters, selectors.</p>
+  <div class="row">
+    <span class="chip"><span class="av" style="background:#009C3B">BR</span>Bruno</span>
+    <span class="chip"><span class="av" style="background:#00913A">LU</span>Lucas</span>
+    <span class="chip"><span class="av" style="background:#E5484D">MA</span>Marina</span>
+    <span class="chip"><span class="av" style="background:#F08C00">PE</span>Pedro</span>
+    <span class="chip"><span class="av" style="background:#1A3C92">JO</span>Joana<span class="pos">LEV</span></span>
+  </div>
+  <p class="tag">SELECTED</p>
+  <div class="row">
+    <span class="chip sel"><span class="av" style="background:#fff;color:#009C3B">BR</span>Bruno</span>
+    <span class="chip sel"><span class="av" style="background:#fff;color:#009C3B">JO</span>Joana<span class="pos">LEV</span></span>
+  </div>
+</body></html>
