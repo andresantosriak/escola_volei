@@ -1,13 +1,13 @@
 {
   "module": "07-csv-responsive",
-  "pass": 5,
+  "pass": 4,
   "warn": 0,
-  "fail": 0,
+  "fail": 1,
   "steps": [
     {
       "name": "Exportar CSV: download + cabeçalho + dados",
       "status": "pass",
-      "detail": "alunos-esporte-recreacao.csv, 8 linhas",
+      "detail": "alunos-esporte-recreacao.csv, 34 linhas",
       "ms": null
     },
     {
@@ -23,9 +23,9 @@
       "ms": null
     },
     {
-      "name": "Responsivo @ 390px sem overflow horizontal",
-      "status": "pass",
-      "detail": "",
+      "name": "Responsivo @ 390px",
+      "status": "fail",
+      "detail": "page.waitForURL: Timeout 15000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"http://localhost:5173/\" until \"load\"\n  navigated to \"http://localhost:5173/login\"\n  navigated to \"http://localhost:5173/login\"\n============================================================",
       "ms": null
     },
     {

@@ -1,64 +1,94 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Users, Plus, ArrowUpDown } from 'lucide-react'
-import { Header } from '@/components/layouts/Header'
+import { ChevronRight, Search, UserPlus, Users } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 import { EmptyState } from '@/components/layouts/EmptyState'
+import { ScreenHeader } from '@/components/layouts/ScreenHeader'
+import { IconButton } from '@/components/layouts/IconButton'
 import { FullPageSpinner } from '@/components/ui/spinner'
-import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
 import { Avatar } from '@/components/students/Avatar'
 import { useStudents } from '@/hooks/use-students'
 import { useClasses } from '@/hooks/use-classes'
-
-type SortKey = 'name' | 'overall'
+import { supabase } from '@/integrations/supabase/client'
+import { POSITIONS, type PositionKey } from '@/lib/constants'
 
 export default function StudentList() {
   const navigate = useNavigate()
-  const [teamId, setTeamId] = useState('')
-  const [sort, setSort] = useState<SortKey>('name')
+  const [teamId, _setTeamId] = useState('')
+  const [search, setSearch] = useState('')
   const { data: classes } = useClasses()
   const { data: students, isLoading, isError } = useStudents(teamId || undefined)
 
+  // Fetch match stats (wins/losses) for all students
+  const { data: matchStats } = useQuery({
+    queryKey: ['student-match-stats'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('v_student_match_stats')
+        .select('student_id, wins, losses')
+      if (error) throw new Error(error.message)
+      return data
+    },
+  })
+
+  const statsMap = useMemo(() => {
+    const map = new Map<string, { wins: number; losses: number }>()
+    for (const s of matchStats ?? []) {
+      if (s.student_id) map.set(s.student_id, { wins: s.wins ?? 0, losses: s.losses ?? 0 })
+    }
+    return map
+  }, [matchStats])
+
+  const activeClass = classes?.find((c) => c.id === teamId)
+  const subtitle = activeClass
+    ? `${activeClass.name} · ${students?.length ?? 0}`
+    : `Todas as turmas · ${students?.length ?? 0}`
+
   const sorted = useMemo(() => {
     if (!students) return []
-    return [...students].sort((a, b) =>
-      sort === 'name' ? a.name.localeCompare(b.name) : b.overall - a.overall,
-    )
-  }, [students, sort])
+    let filtered = students
+    if (search.trim()) {
+      const q = search.trim().toLowerCase()
+      filtered = filtered.filter((s) => s.name.toLowerCase().includes(q))
+    }
+    return [...filtered].sort((a, b) => b.overall - a.overall)
+  }, [students, search])
 
   return (
-    <>
-      <Header
+    <div className="flex flex-col">
+      {/* Header */}
+      <ScreenHeader
         title="Alunos"
-        subtitle="Toque para ver o card"
+        subtitle={subtitle}
         right={
-          <Button size="sm" onClick={() => navigate('/students/new')}>
-            <Plus size={18} /> Novo
-          </Button>
+          <IconButton
+            icon={UserPlus}
+            label="Adicionar aluno"
+            onClick={() => navigate('/students/new')}
+          />
         }
       />
-      <div className="p-4">
-        <div className="mb-4 flex gap-2">
-          <Select
-            className="flex-1"
-            value={teamId}
-            onChange={(e) => setTeamId(e.target.value)}
-            placeholder="Todas as turmas"
-            options={(classes ?? []).map((c) => ({ value: c.id, label: c.name }))}
-          />
-          <Button
-            variant="secondary"
-            size="icon"
-            onClick={() => setSort((s) => (s === 'name' ? 'overall' : 'name'))}
-            aria-label="Alternar ordenação"
-            title={sort === 'name' ? 'Ordenar por nota' : 'Ordenar por nome'}
-          >
-            <ArrowUpDown size={18} />
-          </Button>
-        </div>
 
+      {/* Search bar */}
+      <div className="px-[18px]">
+        <div className="flex items-center gap-3 rounded-[14px] bg-sunken px-3 py-2.5">
+          <Search size={18} className="shrink-0 text-fg-4" />
+          <input
+            type="text"
+            placeholder="Buscar aluno…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="min-w-0 flex-1 border-0 bg-transparent font-body text-[14px] font-medium text-fg-1 placeholder:text-fg-4 focus:outline-none"
+          />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="px-[18px] pb-[120px] pt-3">
         {isLoading && <FullPageSpinner label="Carregando alunos…" />}
-        {isError && <p className="py-8 text-center text-sm text-loss">Erro ao carregar alunos.</p>}
+        {isError && (
+          <p className="py-8 text-center text-sm text-loss">Erro ao carregar alunos.</p>
+        )}
         {students && students.length === 0 && (
           <EmptyState
             icon={Users}
@@ -69,27 +99,38 @@ export default function StudentList() {
           />
         )}
         {sorted.length > 0 && (
-          <div className="flex flex-col gap-2">
-            {sorted.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => navigate(`/students/${s.id}`)}
-                className="flex items-center gap-3 rounded-lg border border-border-1 bg-surface px-3.5 py-2.5 text-left transition-colors hover:bg-sunken active:scale-[0.99]"
-              >
-                <Avatar name={s.name} size={42} />
-                <div className="min-w-0 flex-1">
-                  <div className="truncate font-body text-[15px] font-semibold">{s.name}</div>
-                  <div className="text-xs text-fg-3">{s.position || 'Sem posição'}</div>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="font-display text-xl font-extrabold text-green-600">{s.overall}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-wide text-fg-4">Geral</span>
-                </div>
-              </button>
-            ))}
+          <div className="flex flex-col gap-[9px]">
+            {sorted.map((s) => {
+              const stats = statsMap.get(s.id)
+              const posLabel = POSITIONS[s.position as PositionKey] ?? s.position ?? 'Sem posição'
+              const meta = stats
+                ? `${posLabel} · ${stats.wins}V ${stats.losses}D`
+                : posLabel
+
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => navigate(`/students/${s.id}`)}
+                  className="flex w-full items-center gap-3 rounded-[14px] bg-surface px-3 py-2.5 text-left shadow-sm transition-transform active:scale-[0.99]"
+                >
+                  <Avatar name={s.name} size={40} />
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate font-body text-[15px] font-bold text-fg-1">
+                      {s.name}
+                    </div>
+                    <div className="text-[11.5px] text-fg-4">{meta}</div>
+                  </div>
+                  <span className="font-num text-[22px] font-black text-green-600">
+                    {s.overall}
+                  </span>
+                  <ChevronRight size={20} className="shrink-0 text-fg-4" />
+                </button>
+              )
+            })}
           </div>
         )}
       </div>
-    </>
+    </div>
   )
 }

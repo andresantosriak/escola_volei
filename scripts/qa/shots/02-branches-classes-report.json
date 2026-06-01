@@ -8,7 +8,7 @@
       "name": "Login do coach de QA",
       "status": "pass",
       "detail": "qa.bot@gmail.com",
-      "ms": 2256
+      "ms": 2262
     },
     {
       "name": "Abrir Filiais",
@@ -20,7 +20,7 @@
       "name": "Form de nova filial abre",
       "status": "pass",
       "detail": "",
-      "ms": 579
+      "ms": 786
     },
     {
       "name": "Validação: filial sem nome bloqueia",
@@ -31,8 +31,8 @@
     {
       "name": "Criar filial (POST + toast de sucesso)",
       "status": "pass",
-      "detail": "Filial QA 44204",
-      "ms": 426
+      "detail": "Filial QA 79097",
+      "ms": 457
     },
     {
       "name": "Detalhe da filial mostra dados (InfoRow)",
@@ -55,8 +55,8 @@
     {
       "name": "Criar turma vinculada à filial (POST + toast)",
       "status": "pass",
-      "detail": "Turma QA 44204",
-      "ms": 434
+      "detail": "Turma QA 79097",
+      "ms": 440
     },
     {
       "name": "Detalhe da turma mostra seção de alunos",

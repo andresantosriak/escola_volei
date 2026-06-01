@@ -1,4 +1,4 @@
-import type { BuildOptions, BuildResult, EnginePlayer } from './types'
+import type { BenchPolicy, BuildOptions, BuildResult, EnginePlayer } from './types'
 import { balanceScore, canSetter } from './balance-score'
 import { isMixed, tierMap, tiersOf } from './tier-map'
 
@@ -14,19 +14,83 @@ function makeRng(seed: number): () => number {
   }
 }
 
+/** Fisher-Yates in-place usando o RNG fornecido. */
+function shuffle<T>(arr: T[], rng: () => number): T[] {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = (rng() * (i + 1)) | 0
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
 function levCount(players: EnginePlayer[]): number {
   return players.filter(canSetter).length
 }
 
-/** Escolhe 2*size jogadores (os de maior overall jogam; o resto vai pro banco). */
-function selectPlaying(present: EnginePlayer[], size: number) {
+/**
+ * Escolhe 2*perTeam jogadores; o resto vai pro banco.
+ * - rotation: rodízio justo — embaralha TODOS antes de cortar, então qualquer um pode descansar.
+ * - bench (default): mantém os de maior overall jogando, mas ROTACIONA a fronteira do corte
+ *   (jogadores com overall igual/próximo ao do último que entra) para o banco não ficar imóvel
+ *   entre reequilíbrios. Sempre prioriza manter ao menos 1 levantador em quadra.
+ */
+function selectPlaying(
+  present: EnginePlayer[],
+  size: number,
+  benchPolicy: BenchPolicy,
+  rng: () => number,
+) {
   const perTeam = Math.min(size, Math.floor(present.length / 2))
-  const byForce = [...present].sort((a, b) => b.overall - a.overall)
-  return {
-    playing: byForce.slice(0, 2 * perTeam),
-    bench: byForce.slice(2 * perTeam),
-    perTeam,
+  const slots = 2 * perTeam
+
+  // todos jogam (não há banco) → caminho trivial
+  if (slots >= present.length) {
+    return { playing: [...present], bench: [], perTeam }
   }
+
+  if (benchPolicy === 'rotation') {
+    // rodízio total: embaralha e corta — todos têm a mesma chance de descansar
+    const pool = shuffle([...present], rng)
+    let playing = pool.slice(0, slots)
+    const bench = pool.slice(slots)
+    playing = ensureSetter(playing, bench, rng)
+    return { playing, bench, perTeam }
+  }
+
+  // bench: ordena por overall desc, mas rotaciona quem está na FRONTEIRA do corte
+  const byForce = [...present].sort((a, b) => b.overall - a.overall)
+  const lastIn = byForce[slots - 1].overall
+  // zona de fronteira: todos com overall dentro de 4 pontos do último que entra (empate "técnico")
+  const TIE = 4
+  const locked = byForce.filter((p) => p.overall > lastIn + TIE) // entram sempre
+  const frontier = shuffle(
+    byForce.filter((p) => p.overall <= lastIn + TIE && p.overall >= lastIn - TIE),
+    rng,
+  )
+  const benchFixed = byForce.filter((p) => p.overall < lastIn - TIE) // descansam sempre
+  const needFromFrontier = slots - locked.length
+  let playing = [...locked, ...frontier.slice(0, needFromFrontier)]
+  const bench = [...benchFixed, ...frontier.slice(needFromFrontier)]
+  playing = ensureSetter(playing, bench, rng)
+  return { playing, bench, perTeam }
+}
+
+/** Garante ao menos 1 levantador em quadra trocando com um do banco, se possível. */
+function ensureSetter(playing: EnginePlayer[], bench: EnginePlayer[], rng: () => number) {
+  if (bench.length === 0 || playing.some(canSetter)) return playing
+  const benchSetterIdx = bench.findIndex(canSetter)
+  if (benchSetterIdx < 0) return playing
+  // troca um jogador não-levantador de menor overall por um levantador do banco
+  const outIdx = playing
+    .map((p, i) => ({ i, o: p.overall }))
+    .sort((a, b) => a.o - b.o)[0]?.i
+  if (outIdx == null) return playing
+  const setter = bench[benchSetterIdx]
+  const out = playing[outIdx]
+  playing[outIdx] = setter
+  bench[benchSetterIdx] = out
+  void rng
+  return playing
 }
 
 /**
@@ -38,9 +102,10 @@ function selectPlaying(present: EnginePlayer[], size: number) {
 export function buildTeams(present: EnginePlayer[], opts: BuildOptions): BuildResult {
   const mode = opts.mode
   const size = opts.size
+  const benchPolicy = opts.benchPolicy ?? 'bench'
   const rng = makeRng(opts.seed ?? 0x9e3779b9)
 
-  const { playing, bench, perTeam } = selectPlaying(present, size)
+  const { playing, bench, perTeam } = selectPlaying(present, size, benchPolicy, rng)
   const tm = tierMap(present)
   const bothTiers =
     playing.some((p) => tm[p.id] === 'topo') && playing.some((p) => tm[p.id] === 'base')

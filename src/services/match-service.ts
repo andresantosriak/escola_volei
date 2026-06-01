@@ -23,6 +23,7 @@ export interface MatchDetailData extends Match {
   sets: MatchSet[]
   rostersA: Student[]
   rostersB: Student[]
+  team_name: string | null
 }
 
 const studentCols = 'id, name, position'
@@ -108,7 +109,11 @@ export const matchService = {
   },
 
   async get(id: string): Promise<MatchDetailData> {
-    const { data: match, error } = await supabase.from('matches').select('*').eq('id', id).single()
+    const { data: match, error } = await supabase
+      .from('matches')
+      .select('*, team:teams(name)')
+      .eq('id', id)
+      .single()
     if (error) throw new Error(error.message)
 
     const [setsRes, rostersRes] = await Promise.all([
@@ -125,7 +130,8 @@ export const matchService = {
       else rostersB.push(row.student)
     }
 
-    return { ...(match as Match), sets: setsRes.data ?? [], rostersA, rostersB }
+    const team_name = (match as { team?: { name?: string } | null }).team?.name ?? null
+    return { ...(match as Match), team_name, sets: setsRes.data ?? [], rostersA, rostersB }
   },
 
   async remove(id: string): Promise<void> {

@@ -10,6 +10,7 @@ export function useTeamBuilder(present: TrainingPlayer[]) {
 
   const build = useCallback(
     (opts: Omit<BuildOptions, 'seed'>) => {
+      // seed sempre novo a cada montagem → reequilíbrio gera divisão (e banco) diferentes
       seedRef.current = (seedRef.current + 1) % 100000
       const r = buildTeams(present, { ...opts, seed: seedRef.current })
       setResult(r)

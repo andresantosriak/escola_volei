@@ -1,52 +1,70 @@
-import { Building2, Users, Sliders, Settings as SettingsIcon, LogOut } from 'lucide-react'
+import { Building2, UsersRound, User, SlidersHorizontal, Settings as SettingsIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
-import { Header } from '@/components/layouts/Header'
+import { ScreenHeader } from '@/components/layouts/ScreenHeader'
 import { ListRow } from '@/components/manage/ListRow'
-import { authService } from '@/services/auth-service'
-
-const ITEMS = [
-  { to: '/manage/branches', icon: Building2, title: 'Filiais', subtitle: 'Unidades e endereços' },
-  { to: '/manage/classes', icon: Users, title: 'Turmas', subtitle: 'Horários e níveis' },
-  { to: '/manage/skills', icon: Sliders, title: 'Fundamentos', subtitle: 'O que entra na avaliação' },
-  { to: '/manage/settings', icon: SettingsIcon, title: 'Configurações', subtitle: 'Conta, tema e preferências' },
-]
+import { useBranches } from '@/hooks/use-branches'
+import { useClasses } from '@/hooks/use-classes'
+import { useStudents } from '@/hooks/use-students'
 
 export default function Menu() {
   const navigate = useNavigate()
-  const logout = async () => {
-    try {
-      await authService.signOut()
-      navigate('/login', { replace: true })
-    } catch (e) {
-      toast.error((e as Error).message)
-    }
-  }
+
+  const { data: branches } = useBranches()
+  const { data: classes } = useClasses()
+  const { data: students } = useStudents()
+
+  const branchCount = branches?.length ?? 0
+  const classCount = classes?.length ?? 0
+  const studentCount = students?.length ?? 0
+
+  const items = [
+    {
+      to: '/manage/branches',
+      icon: Building2,
+      title: 'Filiais',
+      subtitle: `${branchCount} unidade${branchCount !== 1 ? 's' : ''}`,
+    },
+    {
+      to: '/manage/classes',
+      icon: UsersRound,
+      title: 'Turmas',
+      subtitle: `${classCount} turma${classCount !== 1 ? 's' : ''} ativa${classCount !== 1 ? 's' : ''}`,
+    },
+    {
+      to: '/students',
+      icon: User,
+      title: 'Alunos',
+      subtitle: `${studentCount} na turma atual`,
+    },
+    {
+      to: '/manage/skills',
+      icon: SlidersHorizontal,
+      title: 'Fundamentos',
+      subtitle: 'Configurar avaliação',
+    },
+    {
+      to: '/manage/settings',
+      icon: SettingsIcon,
+      title: 'Configurações',
+      subtitle: 'Conta e preferências',
+    },
+  ]
+
   return (
     <>
-      <Header title="Menu" subtitle="Gerenciamento" />
-      <div className="flex flex-col gap-2.5 p-4">
-        {ITEMS.map(({ to, icon: Icon, title, subtitle }) => (
+      <ScreenHeader title="Menu" subtitle="Gerenciamento" brand />
+
+      {/* List body — matches mockup er-body paddingTop 4 + er-list gap 9 */}
+      <div className="flex flex-col gap-[9px] px-[18px] pt-1 pb-[120px]">
+        {items.map(({ to, icon, title, subtitle }) => (
           <ListRow
             key={to}
             title={title}
             subtitle={subtitle}
+            leadingIcon={icon}
             onClick={() => navigate(to)}
-            leading={
-              <div className="flex size-10 items-center justify-center rounded-lg bg-green-50 text-green-500">
-                <Icon size={20} />
-              </div>
-            }
           />
         ))}
-        <button
-          type="button"
-          onClick={logout}
-          className="mt-3 flex items-center justify-center gap-2 rounded-lg py-3 font-body text-sm font-semibold text-loss"
-        >
-          <LogOut size={18} />
-          Sair
-        </button>
       </div>
     </>
   )

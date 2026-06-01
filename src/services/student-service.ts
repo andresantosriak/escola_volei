@@ -98,6 +98,29 @@ export const studentService = {
     }
   },
 
+  /**
+   * Carrega overall + skills de vários alunos em LOTE (2 queries totais, não 6×N).
+   * Usado na chamada → montar times para evitar N+1 sequencial (era studentService.get por aluno).
+   */
+  async enginePlayers(students: Student[]): Promise<Map<string, { overall: number; skills: Record<string, number> }>> {
+    const map = new Map<string, { overall: number; skills: Record<string, number> }>()
+    if (students.length === 0) return map
+    const ids = students.map((s) => s.id)
+
+    const [overallRes, skillsRes] = await Promise.all([
+      supabase.from('v_student_overall').select('student_id, overall_rating').in('student_id', ids),
+      supabase.from('student_skills').select('student_id, skill_key, value').in('student_id', ids),
+    ])
+
+    const overallById = new Map((overallRes.data ?? []).map((r) => [r.student_id, r.overall_rating]))
+    for (const id of ids) map.set(id, { overall: overallById.get(id) ?? 73, skills: {} })
+    for (const row of skillsRes.data ?? []) {
+      const entry = map.get(row.student_id)
+      if (entry) entry.skills[row.skill_key] = row.value
+    }
+    return map
+  },
+
   async create(input: StudentInput): Promise<Student> {
     const { payload, teamIds } = splitInput(input)
     const { data, error } = await supabase.from('students').insert(payload).select().single()

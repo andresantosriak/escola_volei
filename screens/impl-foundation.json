@@ -1,0 +1,17 @@
+{
+  "screen": "foundation",
+  "files": [
+    "src/components/layouts/ScreenHeader.tsx",
+    "src/components/layouts/IconButton.tsx",
+    "src/components/manage/ListRow.tsx",
+    "src/components/manage/InfoRow.tsx"
+  ],
+  "tsOk": true,
+  "changes": "Created ScreenHeader (title/subtitle/right/back/brand props, bg-app transparent, q-h1 Archivo 28px extrabold, BrandMark integration). Created IconButton (white variant: 44px rounded-[14px] bg-surface shadow-sm; ghost variant: 40px rounded-full transparent). Refined ListRow (added leadingIcon convenience prop for green-50 square, renamed trailing→right with back-compat, increased radius to 18px, gap to 12px for print fidelity). Refined InfoRow (added icon prop for stacked layout used in detail screens, kept inline layout for settings). All backward-compatible. bg-app (#f4f6fb), BrandMark, BottomNav, Button verified — all match prints, no changes needed.",
+  "signatures": {
+    "ScreenHeader": "{ title: string; subtitle?: string; right?: ReactNode; back?: boolean; onBack?: () => void; brand?: boolean }",
+    "IconButton": "{ icon: LucideIcon; label: string; variant?: 'white' | 'ghost'; onClick?: () => void; className?: string }",
+    "ListRow": "{ title: string; subtitle?: string; leadingIcon?: LucideIcon; leading?: ReactNode; right?: ReactNode; trailing?: ReactNode; onClick?: () => void; className?: string }",
+    "InfoRow": "{ label: string; value?: ReactNode; icon?: LucideIcon; children?: ReactNode }"
+  }
+}

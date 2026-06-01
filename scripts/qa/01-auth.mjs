@@ -1,5 +1,5 @@
 // QA módulo 01 — Autenticação: login, validação, rotas protegidas, logout, recuperação.
-import { makeContext, makeReport, BASE, QA_EMAIL, QA_PASS, sleep } from './lib.mjs'
+import { makeContext, makeReport, BASE, QA_EMAIL, QA_PASS, sleep, go } from './lib.mjs'
 
 const { browser, page, consoleErrors } = await makeContext()
 const rep = makeReport('01-auth')
@@ -64,8 +64,8 @@ try {
   const stillHome = page.url() === `${BASE}/` || page.url() === `${BASE}`
   rep.step('Sessão persiste após reload (não volta p/ login)', stillHome ? 'pass' : 'fail', page.url())
 
-  // 9. Logout pelo Menu
-  await page.click('text=Menu')
+  // 9. Logout (movido para Configurações no redesign)
+  await go(page, '/manage/settings')
   await page.waitForLoadState('networkidle')
   await page.click('text=Sair')
   await page.waitForURL(/\/login/, { timeout: 10000 })

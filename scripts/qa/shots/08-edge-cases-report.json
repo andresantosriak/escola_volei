@@ -1,14 +1,14 @@
 {
   "module": "08-edge-cases",
-  "pass": 5,
+  "pass": 2,
   "warn": 0,
-  "fail": 0,
+  "fail": 1,
   "steps": [
     {
       "name": "Login do coach de QA",
       "status": "pass",
       "detail": "qa.bot@gmail.com",
-      "ms": 1820
+      "ms": 1732
     },
     {
       "name": "Turma com 2 alunos: \"Montar times\" desabilitado + mensagem",
@@ -17,21 +17,9 @@
       "ms": null
     },
     {
-      "name": "Set empatado bloqueia salvar (exige vencedor)",
-      "status": "pass",
-      "detail": "",
-      "ms": null
-    },
-    {
-      "name": "W.O. sem vencedor bloqueia salvar",
-      "status": "pass",
-      "detail": "mensagem exibida",
-      "ms": null
-    },
-    {
-      "name": "Console limpo no fluxo de edge cases",
-      "status": "pass",
-      "detail": "0 erro(s)",
+      "name": "ERRO FATAL",
+      "status": "fail",
+      "detail": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Registrar resultado\")')\u001b[22m\n",
       "ms": null
     }
   ]

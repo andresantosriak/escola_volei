@@ -1,14 +1,14 @@
 {
   "module": "04-training",
-  "pass": 17,
-  "warn": 0,
+  "pass": 15,
+  "warn": 1,
   "fail": 0,
   "steps": [
     {
       "name": "Login do coach de QA",
       "status": "pass",
       "detail": "qa.bot@gmail.com",
-      "ms": 1703
+      "ms": 1875
     },
     {
       "name": "Home lista turma de treino",
@@ -26,7 +26,7 @@
       "name": "Iniciar treino → tela de Chamada",
       "status": "pass",
       "detail": "",
-      "ms": 466
+      "ms": 468
     },
     {
       "name": "Contador inicia 7/7 (todos presentes por padrão)",
@@ -44,7 +44,7 @@
       "name": "Chamada → Montar times",
       "status": "pass",
       "detail": "",
-      "ms": 39
+      "ms": 642
     },
     {
       "name": "Engine montou times + índice de equilíbrio",
@@ -68,17 +68,17 @@
       "name": "Montar times → Registrar resultado",
       "status": "pass",
       "detail": "",
-      "ms": 39
+      "ms": 54
     },
     {
       "name": "Tela de resultado tem steppers de placar",
       "status": "pass",
-      "detail": "2 botões +",
+      "detail": "6 botões +",
       "ms": null
     },
     {
       "name": "Placar 25×20 → vencedor automático Time A (1×0)",
-      "status": "pass",
+      "status": "warn",
       "detail": "",
       "ms": null
     },
@@ -92,13 +92,7 @@
       "name": "Salvar resultado → avaliação ou histórico",
       "status": "pass",
       "detail": "",
-      "ms": 1050
-    },
-    {
-      "name": "Concluir treino → histórico",
-      "status": "pass",
-      "detail": "",
-      "ms": null
+      "ms": 845
     },
     {
       "name": "Console limpo no fluxo de treino",

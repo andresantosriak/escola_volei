@@ -1,14 +1,14 @@
 {
   "module": "03-students",
-  "pass": 8,
-  "warn": 0,
+  "pass": 7,
+  "warn": 1,
   "fail": 0,
   "steps": [
     {
       "name": "Login do coach de QA",
       "status": "pass",
       "detail": "qa.bot@gmail.com",
-      "ms": 2340
+      "ms": 1749
     },
     {
       "name": "Abrir Alunos",
@@ -19,7 +19,7 @@
     {
       "name": "Criar 6 alunos",
       "status": "pass",
-      "detail": "6/6, 1º em 1242ms",
+      "detail": "6/6, 1º em 1465ms",
       "ms": null
     },
     {
@@ -41,9 +41,9 @@
       "ms": null
     },
     {
-      "name": "Alternar ordenação (nome ↔ nota)",
-      "status": "pass",
-      "detail": "",
+      "name": "Botão de ordenação",
+      "status": "warn",
+      "detail": "não encontrado",
       "ms": null
     },
     {

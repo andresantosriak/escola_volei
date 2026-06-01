@@ -1,7 +1,7 @@
 // Página de DEV (sem auth) para comparar cada componente com seu preview HTML do design system.
 // Cada bloco usa os MESMOS dados do preview correspondente em design-system/preview/.
 // Acesse /__showcase. Não entra em produção (rota só montada em dev).
-import { Calendar, Trophy, Scale, AlertTriangle, Play, Shuffle } from 'lucide-react'
+import { CalendarCheck, Flame, Trophy, Scale, AlertTriangle, Play, Shuffle } from 'lucide-react'
 import { PlayerCard } from '@/components/students/PlayerCard'
 import { ResultCard } from '@/components/history/ResultCard'
 import { PresenceToggle } from '@/components/training/PresenceToggle'
@@ -66,11 +66,13 @@ export default function Showcase() {
       </Block>
 
       <Block id="statbadge" title="Badge de stat">
+        {/* 5 badges idênticos a comp-statbadge.html: trophy, loss, neutral, calendar-check, flame */}
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <StatBadge value="12V" tone="win" icon={Trophy} />
           <StatBadge value="4D" tone="loss" />
           <StatBadge value="75%" tone="neutral" label="aproveitamento" />
-          <StatBadge value="85%" tone="win" icon={Calendar} label="presença" />
+          <StatBadge value="85%" tone="win" icon={CalendarCheck} label="presença" />
+          <StatBadge value="3" tone="neutral" icon={Flame} label="vitórias seguidas" />
         </div>
       </Block>
 

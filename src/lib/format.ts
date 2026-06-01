@@ -44,6 +44,15 @@ export function formatDateFull(iso: string): string {
   return d.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' })
 }
 
+// Fiel a design-system/preview/comp-resultado.html (.date): "Ter · 27 mai" — weekday · dia mês,
+// sem ano, sem pontos, separador middot. (a ResultCard aplica uppercase via CSS, igual ao preview.)
+export function formatMatchCardDate(iso: string): string {
+  const d = new Date(iso + (iso.length === 10 ? 'T00:00:00' : ''))
+  const weekday = d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace(/\.$/, '')
+  const month = d.toLocaleDateString('pt-BR', { month: 'short' }).replace(/\.$/, '')
+  return `${weekday} · ${d.getDate()} ${month}`
+}
+
 export function pluralize(n: number, singular: string, plural: string): string {
   return `${n} ${n === 1 ? singular : plural}`
 }

@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom'
-import { Building2, Plus, Archive } from 'lucide-react'
-import { Header } from '@/components/layouts/Header'
+import { Building2, Plus } from 'lucide-react'
+import { ScreenHeader } from '@/components/layouts/ScreenHeader'
+import { IconButton } from '@/components/layouts/IconButton'
 import { EmptyState } from '@/components/layouts/EmptyState'
 import { FullPageSpinner } from '@/components/ui/spinner'
 import { ListRow } from '@/components/manage/ListRow'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { useBranches } from '@/hooks/use-branches'
 
 export default function Branches() {
@@ -14,16 +13,18 @@ export default function Branches() {
 
   return (
     <>
-      <Header
+      <ScreenHeader
         title="Filiais"
         back
         right={
-          <Button size="sm" onClick={() => navigate('/manage/branches/new')}>
-            <Plus size={18} /> Nova
-          </Button>
+          <IconButton
+            icon={Plus}
+            label="Nova filial"
+            onClick={() => navigate('/manage/branches/new')}
+          />
         }
       />
-      <div className="p-4">
+      <div className="px-[18px] pt-1 pb-6">
         {isLoading && <FullPageSpinner label="Carregando filiais…" />}
         {isError && <p className="py-8 text-center text-sm text-loss">Erro ao carregar filiais.</p>}
         {branches && branches.length === 0 && (
@@ -37,26 +38,19 @@ export default function Branches() {
         )}
         {branches && branches.length > 0 && (
           <div className="flex flex-col gap-2.5">
-            {branches.map((b) => (
-              <ListRow
-                key={b.id}
-                title={b.name}
-                subtitle={b.city || b.address || 'Sem endereço'}
-                onClick={() => navigate(`/manage/branches/${b.id}`)}
-                leading={
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-green-50 text-green-500">
-                    <Building2 size={20} />
-                  </div>
-                }
-                trailing={
-                  b.archived ? (
-                    <Badge tone="warn">
-                      <Archive size={12} /> Arquivada
-                    </Badge>
-                  ) : undefined
-                }
-              />
-            ))}
+            {branches.map((b) => {
+              const parts = [b.city, b.address].filter(Boolean)
+              const subtitle = parts.length > 0 ? parts.join(' · ') : 'Sem endereço'
+              return (
+                <ListRow
+                  key={b.id}
+                  title={b.name}
+                  subtitle={subtitle}
+                  leadingIcon={Building2}
+                  onClick={() => navigate(`/manage/branches/${b.id}`)}
+                />
+              )
+            })}
           </div>
         )}
       </div>

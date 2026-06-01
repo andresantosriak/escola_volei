@@ -3,16 +3,31 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { Archive, ArchiveRestore, Trash2 } from 'lucide-react'
-import { Header } from '@/components/layouts/Header'
+import {
+  Archive,
+  ArchiveRestore,
+  Building2,
+  Lock,
+  MapPin,
+  Navigation,
+  Phone,
+  Plus,
+  Trash2,
+  User,
+  UsersRound,
+} from 'lucide-react'
+import { ScreenHeader } from '@/components/layouts/ScreenHeader'
 import { FullPageSpinner } from '@/components/ui/spinner'
+import { EmptyState } from '@/components/layouts/EmptyState'
 import { Field } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Sheet } from '@/components/ui/sheet'
 import { InfoRow } from '@/components/manage/InfoRow'
+import { ListRow } from '@/components/manage/ListRow'
 import { branchSchema, type BranchInput } from '@/schemas/branch-schema'
 import { useBranch, useBranchMutations } from '@/hooks/use-branches'
+import { useClasses } from '@/hooks/use-classes'
 import { branchService } from '@/services/branch-service'
 
 export default function BranchDetail() {
@@ -20,6 +35,7 @@ export default function BranchDetail() {
   const isNew = !id || id === 'new'
   const navigate = useNavigate()
   const { data: branch, isLoading } = useBranch(isNew ? undefined : id)
+  const { data: classes } = useClasses(isNew ? undefined : id)
   const { create, update, setArchived, remove } = useBranchMutations()
 
   const [editing, setEditing] = useState(isNew)
@@ -71,27 +87,46 @@ export default function BranchDetail() {
   if (!isNew && isLoading) return <FullPageSpinner />
 
   const saving = create.isPending || update.isPending
+  const turmas = classes ?? []
+  const hasTurmas = turmas.length > 0
+
+  /* ---- right header element ---- */
+  const headerRight = !isNew && !editing ? (
+    <button
+      type="button"
+      onClick={() => setEditing(true)}
+      className="rounded-[12px] bg-surface px-[14px] py-[6px] font-display text-[15px] font-bold text-green-600 shadow-sm active:opacity-70"
+    >
+      Editar
+    </button>
+  ) : undefined
 
   return (
     <>
-      <Header title={isNew ? 'Nova filial' : branch?.name || 'Filial'} back />
-      <div className="p-4">
+      <ScreenHeader
+        title={isNew ? 'Nova filial' : branch?.name || 'Filial'}
+        back
+        right={headerRight}
+      />
+
+      <div className="px-[18px] pb-8">
         {editing ? (
+          /* ---- EDIT / NEW MODE ---- */
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <Field label="Nome *" error={errors.name?.message}>
-              <Input placeholder="Unidade Centro" {...register('name')} />
+            <Field label="Nome da filial *" error={errors.name?.message}>
+              <Input placeholder="Ex.: Unidade Centro" {...register('name')} />
             </Field>
-            <Field label="Cidade">
-              <Input placeholder="São Paulo · Centro" {...register('city')} />
+            <Field label="Cidade / região">
+              <Input placeholder="Ex.: São Paulo · Centro" {...register('city')} />
             </Field>
-            <Field label="Endereço">
-              <Input placeholder="Rua das Quadras, 120" {...register('address')} />
+            <Field label="Endereço · opcional">
+              <Input placeholder="Rua, número" {...register('address')} />
             </Field>
-            <Field label="Telefone">
-              <Input placeholder="(11) 3344-1200" {...register('phone')} />
+            <Field label="Telefone · opcional">
+              <Input placeholder="(11) 0000-0000" {...register('phone')} />
             </Field>
-            <Field label="Responsável">
-              <Input placeholder="Téc. Marcos Lima" {...register('manager_name')} />
+            <Field label="Responsável · opcional">
+              <Input placeholder="Nome" {...register('manager_name')} />
             </Field>
             <div className="mt-2 flex gap-2">
               {!isNew && (
@@ -100,24 +135,78 @@ export default function BranchDetail() {
                 </Button>
               )}
               <Button type="submit" full disabled={saving}>
-                {saving ? 'Salvando…' : 'Salvar'}
+                {saving ? 'Salvando...' : 'Salvar'}
               </Button>
             </div>
           </form>
         ) : (
           branch && (
             <>
-              <div className="rounded-lg border border-border-1 bg-surface px-4 py-1">
-                <InfoRow label="Nome" value={branch.name} />
-                <InfoRow label="Cidade" value={branch.city} />
-                <InfoRow label="Endereço" value={branch.address} />
-                <InfoRow label="Telefone" value={branch.phone} />
-                <InfoRow label="Responsável" value={branch.manager_name} />
+              {/* ---- INFO CARD ---- */}
+              <div className="rounded-[18px] bg-surface px-4 shadow-sm">
+                <InfoRow icon={Building2} label="Nome" value={branch.name} />
+                <InfoRow icon={MapPin} label="Cidade / região" value={branch.city} />
+                <InfoRow icon={Navigation} label="Endereço" value={branch.address} />
+                <InfoRow icon={Phone} label="Telefone" value={branch.phone} />
+                <InfoRow icon={User} label="Responsável" value={branch.manager_name} />
               </div>
-              <div className="mt-4 flex flex-col gap-2">
-                <Button onClick={() => setEditing(true)}>Editar</Button>
+
+              {/* ---- TURMAS SECTION ---- */}
+              <h2 className="mb-2.5 mt-6 font-display text-[15px] font-extrabold text-fg-1">
+                Turmas desta filial{' '}
+                <span className="font-body font-semibold text-fg-3">&middot; {turmas.length}</span>
+              </h2>
+
+              {hasTurmas ? (
+                <>
+                  <div className="flex flex-col gap-2.5">
+                    {turmas.map((t) => {
+                      const parts = [
+                        t.schedule_days,
+                        t.schedule_time?.slice(0, 5),
+                        `${t.student_count} alunos`,
+                      ].filter(Boolean)
+                      return (
+                        <ListRow
+                          key={t.id}
+                          title={t.name}
+                          subtitle={parts.join(' · ')}
+                          leadingIcon={UsersRound}
+                          onClick={() => navigate(`/manage/classes/${t.id}`)}
+                        />
+                      )
+                    })}
+                  </div>
+
+                  <Button
+                    variant="secondary"
+                    full
+                    className="mt-3"
+                    onClick={() => navigate(`/manage/classes/new?branch=${id}`)}
+                  >
+                    <Plus size={18} />
+                    Nova turma
+                  </Button>
+                </>
+              ) : (
+                <EmptyState
+                  icon={UsersRound}
+                  title="Nenhuma turma nesta filial"
+                  description="Crie a primeira turma para começar a usar esta unidade."
+                  ctaLabel="Adicionar primeira turma"
+                  onCta={() => navigate(`/manage/classes/new?branch=${id}`)}
+                />
+              )}
+
+              {/* ---- ACOES SECTION ---- */}
+              <h2 className="mb-2.5 mt-6 font-display text-[15px] font-extrabold text-fg-1">
+                Ações
+              </h2>
+
+              <div className="flex flex-col gap-2.5">
                 <Button
-                  variant="secondary"
+                  variant="ghost"
+                  full
                   onClick={() =>
                     setArchived.mutate(
                       { id: branch.id, archived: !branch.archived },
@@ -128,13 +217,37 @@ export default function BranchDetail() {
                     )
                   }
                 >
-                  {branch.archived ? <ArchiveRestore size={18} /> : <Archive size={18} />}
-                  {branch.archived ? 'Reativar' : 'Arquivar'}
+                  {branch.archived ? (
+                    <ArchiveRestore size={18} />
+                  ) : (
+                    <Archive size={18} />
+                  )}
+                  {branch.archived ? 'Reativar filial' : 'Arquivar filial'}
                 </Button>
-                <Button variant="ghost" className="text-loss" onClick={() => setConfirmDelete(true)}>
-                  <Trash2 size={18} /> Excluir
-                </Button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    hasTurmas
+                      ? toast.error('Mova ou arquive as turmas primeiro')
+                      : setConfirmDelete(true)
+                  }
+                  className={`inline-flex w-full items-center justify-center gap-2 rounded-[14px] border-[1.5px] border-border-2 bg-transparent px-[18px] py-3 font-display text-[15px] font-bold transition-all active:scale-[0.97] ${
+                    hasTurmas ? 'text-fg-4' : 'text-loss'
+                  }`}
+                >
+                  <Trash2 size={18} />
+                  Excluir filial
+                </button>
               </div>
+
+              {hasTurmas && (
+                <p className="mt-3 flex items-start gap-1.5 px-0.5 text-[11.5px] leading-snug text-fg-4">
+                  <Lock size={13} className="mt-0.5 shrink-0" />
+                  Filiais com turmas ativas não podem ser excluídas — arquive ou mova as turmas
+                  antes.
+                </p>
+              )}
             </>
           )
         )}

@@ -30,6 +30,8 @@ import MatchDetail from '@/pages/history/MatchDetail'
 
 import ShareCard from '@/pages/share/ShareCard'
 
+import Showcase from '@/pages/Showcase'
+
 export const router = createBrowserRouter([
   {
     element: <PublicOnlyRoute />,
@@ -51,8 +53,13 @@ export const router = createBrowserRouter([
           { path: '/', element: <Home /> },
           { path: '/menu', element: <Menu /> },
           { path: '/history', element: <MatchHistory /> },
-          { path: '/history/:id', element: <MatchDetail /> },
           { path: '/students', element: <StudentList /> },
+        ],
+      },
+      {
+        element: <FocusLayout />,
+        children: [
+          { path: '/history/:id', element: <MatchDetail /> },
           { path: '/students/new', element: <StudentDetail /> },
           { path: '/students/:id', element: <StudentDetail /> },
           { path: '/manage/branches', element: <Branches /> },
@@ -64,11 +71,6 @@ export const router = createBrowserRouter([
           { path: '/manage/skills', element: <Skills /> },
           { path: '/manage/settings', element: <Settings /> },
           { path: '/share', element: <ShareCard /> },
-        ],
-      },
-      {
-        element: <FocusLayout />,
-        children: [
           { path: '/training/attendance', element: <Attendance /> },
           { path: '/training/teams', element: <BuildTeams /> },
           { path: '/training/result', element: <RegisterResult /> },
@@ -77,6 +79,9 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
+  // rota só de DEV p/ auditoria visual do design system (fora do bundle de produção)
+  ...(import.meta.env.DEV ? [{ path: '/__showcase', element: <Showcase /> }] : []),
 
   { path: '*', element: <NotFound /> },
 ], {

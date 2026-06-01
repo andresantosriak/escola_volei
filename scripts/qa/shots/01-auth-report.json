@@ -8,7 +8,7 @@
       "name": "Rota protegida (/) sem sessão redireciona p/ login",
       "status": "pass",
       "detail": "",
-      "ms": 455
+      "ms": 494
     },
     {
       "name": "Login mostra campos e-mail + senha",
@@ -26,7 +26,7 @@
       "name": "Login com senha errada → erro amigável",
       "status": "pass",
       "detail": "toast de erro",
-      "ms": 2540
+      "ms": 2542
     },
     {
       "name": "Link \"Criar conta\" → /register",
@@ -44,7 +44,7 @@
       "name": "Login correto → Home",
       "status": "pass",
       "detail": "",
-      "ms": 1175
+      "ms": 1200
     },
     {
       "name": "Sessão persiste após reload (não volta p/ login)",

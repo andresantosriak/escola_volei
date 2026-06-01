@@ -1,6 +1,6 @@
 import { Calendar, Trophy } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { formatDateFull } from '@/lib/format'
+import { formatMatchCardDate } from '@/lib/format'
 import type { MatchListItem } from '@/services/match-service'
 
 // Fiel a design-system/preview/comp-resultado.html:
@@ -27,7 +27,7 @@ export function ResultCard({ match, onClick }: { match: MatchListItem; onClick?:
         style={{ gap: 6, marginBottom: 12, fontSize: 11, letterSpacing: '0.04em' }}
       >
         <Calendar size={14} />
-        {formatDateFull(match.match_date)}
+        {formatMatchCardDate(match.match_date)}
         {match.walkover && (
           <span
             className="ml-auto rounded font-bold text-warn-700"

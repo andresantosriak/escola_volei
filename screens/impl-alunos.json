@@ -1,0 +1,8 @@
+{
+  "screen": "alunos",
+  "files": [
+    "src/pages/students/StudentList.tsx"
+  ],
+  "tsOk": true,
+  "changes": "Rewrote StudentList presentation to match print 11-alunos-lista.png: (1) replaced hand-rolled header with ScreenHeader shared component + IconButton (UserPlus) on the right; (2) kept search bar with sunken bg, Search icon, and placeholder 'Buscar aluno…'; (3) inlined student rows using Avatar + position label + V/D stats from v_student_match_stats view + overall green number + ChevronRight, matching the print layout exactly; (4) added useQuery for v_student_match_stats to fetch wins/losses for subtitle line (e.g. 'Levantador · 12V 4D'); (5) preserved all hooks, navigation, loading/error/empty states, and sort by overall desc."
+}

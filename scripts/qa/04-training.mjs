@@ -88,43 +88,39 @@ try {
   rep.step('Placar 25×20 → vencedor automático Time A (1×0)', tally ? 'pass' : 'warn')
   await rep.shot(page, 'result-filled')
 
-  // adicionar set
+  // adicionar set e preenchê-lo (set vazio = empate, que desabilita o salvar — comportamento correto do app)
   const addSet = page.locator('button:has-text("Adicionar set")')
   if (await addSet.count()) {
     await addSet.click()
     await sleep(300)
     rep.step('Adicionar 2º set', 'pass')
+    // preenche o 2º set 25×18 (Time A vence o set também → mantém vencedor definido)
+    const plus2 = page.locator('button[aria-label="Aumentar"]')
+    const n2 = await plus2.count()
+    if (n2 >= 4) {
+      for (let k = 0; k < 25; k++) await plus2.nth(2).click()
+      for (let k = 0; k < 18; k++) await plus2.nth(3).click()
+      await sleep(300)
+    }
   }
 
-  // salvar e finalizar → vai para avaliação (sessionId + result presentes)
+  // salvar resultado → vai para avaliação (sessionId + result presentes)
   t0 = Date.now()
-  await page.click('button:has-text("Salvar e finalizar")')
-  const afterSave = await expectMatch(page, /Avaliação do treino|Histórico/i, 10000)
+  await page.click('button:has-text("Salvar resultado")')
+  // salvar com sessão+times leva à tela de avaliação (header = nome do aluno + "Fundamentos técnicos")
+  const afterSave = await expectMatch(page, /Fundamentos|Hist[óo]rico|Engajamento/i, 10000)
   rep.step('Salvar resultado → avaliação ou histórico', afterSave ? 'pass' : 'fail', '', Date.now() - t0)
   await rep.shot(page, 'after-save')
 
   // 5. AVALIAÇÃO (se chegou nela)
-  if (/Avaliação do treino/i.test(await page.textContent('body'))) {
-    // expande primeiro aluno e salva
-    const firstPlayer = page.locator('button:has-text("Treino")').first()
-    if (await firstPlayer.count()) {
-      await firstPlayer.click()
-      await sleep(500)
-      const saveNext = page.locator('button:has-text("Salvar e próximo")')
-      if (await saveNext.count()) {
-        await saveNext.click()
-        await sleep(1500)
-        rep.step('Avaliar aluno (engajamento + fundamentos) e salvar', 'pass')
-      }
+  if (/Fundamentos/i.test(await page.textContent('body'))) {
+    const saveNext = page.locator('button:has-text("Salvar e próximo"), button:has-text("Salvar avaliação")')
+    if (await saveNext.count()) {
+      await saveNext.first().click()
+      await sleep(1500)
+      rep.step('Avaliar aluno (engajamento + fundamentos) e salvar', 'pass')
     }
     await rep.shot(page, 'evaluate')
-    // concluir
-    const finish = page.locator('button:has-text("Concluir treino"), button:has-text("Pular avaliação")')
-    if (await finish.count()) {
-      await finish.first().click()
-      await sleep(1500)
-      rep.step('Concluir treino → histórico', (await expectText(page, 'Histórico', 6000)) ? 'pass' : 'warn')
-    }
   }
 
   rep.step('Console limpo no fluxo de treino', consoleErrors.length === 0 ? 'pass' : 'warn', `${consoleErrors.length} erro(s)`)

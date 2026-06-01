@@ -1,14 +1,14 @@
 {
   "module": "05-history-share",
-  "pass": 12,
-  "warn": 0,
+  "pass": 5,
+  "warn": 4,
   "fail": 0,
   "steps": [
     {
       "name": "Login do coach de QA",
       "status": "pass",
       "detail": "qa.bot@gmail.com",
-      "ms": 2238
+      "ms": 1806
     },
     {
       "name": "Histórico lista partida registrada",
@@ -30,44 +30,26 @@
     },
     {
       "name": "Detalhe mostra equilíbrio da montagem",
-      "status": "pass",
+      "status": "warn",
       "detail": "",
       "ms": null
     },
     {
       "name": "Detalhe mostra elencos dos times",
-      "status": "pass",
+      "status": "warn",
       "detail": "",
       "ms": null
     },
     {
-      "name": "Detalhe → tela Compartilhar",
-      "status": "pass",
-      "detail": "",
-      "ms": 50
-    },
-    {
-      "name": "Trocar formato p/ Vertical",
-      "status": "pass",
-      "detail": "",
+      "name": "Botão \"Compartilhar resultado\" no detalhe",
+      "status": "warn",
+      "detail": "não encontrado",
       "ms": null
     },
     {
-      "name": "Trocar tema p/ Escuro",
-      "status": "pass",
-      "detail": "",
-      "ms": null
-    },
-    {
-      "name": "Toggle de conteúdo (elencos)",
-      "status": "pass",
-      "detail": "",
-      "ms": null
-    },
-    {
-      "name": "Compartilhar player card do aluno",
-      "status": "pass",
-      "detail": "",
+      "name": "Botão \"Compartilhar card\"",
+      "status": "warn",
+      "detail": "não encontrado",
       "ms": null
     },
     {

@@ -3,8 +3,18 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { Trash2, Users } from 'lucide-react'
-import { Header } from '@/components/layouts/Header'
+import {
+  BarChart3,
+  Building2,
+  Calendar,
+  Cake,
+  Play,
+  Trash2,
+  User,
+  UsersRound,
+  X,
+} from 'lucide-react'
+import { ScreenHeader } from '@/components/layouts/ScreenHeader'
 import { FullPageSpinner } from '@/components/ui/spinner'
 import { Field } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
@@ -72,7 +82,7 @@ export default function ClassDetail() {
   const onDelete = async () => {
     try {
       await remove.mutateAsync(id!)
-      toast.success('Turma excluída.')
+      toast.success('Turma excluida.')
       navigate('/manage/classes', { replace: true })
     } catch (e) {
       toast.error((e as Error).message)
@@ -83,33 +93,54 @@ export default function ClassDetail() {
   if (!isNew && isLoading) return <FullPageSpinner />
   const saving = create.isPending || update.isPending
   const branchOptions = (branches ?? []).map((b) => ({ value: b.id, label: b.name }))
+  const branchName = branches?.find((b) => b.id === team?.branch_id)?.name
+
+  /* -- right header element -- */
+  const headerRight = !isNew && !editing ? (
+    <button
+      type="button"
+      onClick={() => setEditing(true)}
+      className="rounded-[12px] bg-surface px-[14px] py-[6px] font-display text-[15px] font-bold text-green-600 shadow-sm active:opacity-70"
+    >
+      Editar
+    </button>
+  ) : undefined
 
   return (
     <>
-      <Header title={isNew ? 'Nova turma' : team?.name || 'Turma'} back />
-      <div className="p-4">
+      <ScreenHeader
+        title={isNew ? 'Nova turma' : team?.name || 'Turma'}
+        back
+        right={headerRight}
+      />
+
+      <div className="px-[18px] pb-32 pt-1">
         {editing ? (
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <Field label="Nome *" error={errors.name?.message}>
-              <Input placeholder="Sub-17 Masculino" {...register('name')} />
+            <Field label="Nome da turma *" error={errors.name?.message}>
+              <Input placeholder="Ex.: Sub-17 Masculino" {...register('name')} />
             </Field>
             <Field label="Filial *" error={errors.branch_id?.message}>
               <Select placeholder="Selecione a filial" options={branchOptions} {...register('branch_id')} />
             </Field>
-            <Field label="Dias">
-              <Input placeholder="Seg · Qua · Sex" {...register('schedule_days')} />
-            </Field>
-            <Field label="Horário">
-              <Input type="time" {...register('schedule_time')} />
-            </Field>
-            <Field label="Nível" error={errors.level?.message}>
-              <Select options={TEAM_LEVELS.map((l) => ({ value: l, label: l }))} {...register('level')} />
-            </Field>
-            <Field label="Faixa etária">
-              <Input placeholder="15–17 anos" {...register('age_group')} />
-            </Field>
-            <Field label="Professor">
-              <Input placeholder="Téc. Marcos" {...register('instructor_name')} />
+            <div className="flex gap-3">
+              <Field label="Dias" className="flex-1">
+                <Input placeholder="Seg . Qua . Sex" {...register('schedule_days')} />
+              </Field>
+              <Field label="Horario" className="flex-1">
+                <Input type="time" {...register('schedule_time')} />
+              </Field>
+            </div>
+            <div className="flex gap-3">
+              <Field label="Nivel" error={errors.level?.message} className="flex-1">
+                <Select options={TEAM_LEVELS.map((l) => ({ value: l, label: l }))} {...register('level')} />
+              </Field>
+              <Field label="Faixa etaria" className="flex-1">
+                <Input placeholder="15-17 anos" {...register('age_group')} />
+              </Field>
+            </div>
+            <Field label="Professor responsavel">
+              <Input placeholder="Nome" {...register('instructor_name')} />
             </Field>
             <div className="mt-2 flex gap-2">
               {!isNew && (
@@ -118,53 +149,79 @@ export default function ClassDetail() {
                 </Button>
               )}
               <Button type="submit" full disabled={saving}>
-                {saving ? 'Salvando…' : 'Salvar'}
+                {saving ? 'Salvando...' : 'Salvar'}
               </Button>
             </div>
           </form>
         ) : (
           team && (
             <>
-              <div className="rounded-lg border border-border-1 bg-surface px-4 py-1">
-                <InfoRow label="Nome" value={team.name} />
-                <InfoRow label="Dias" value={team.schedule_days} />
-                <InfoRow label="Horário" value={team.schedule_time?.slice(0, 5)} />
-                <InfoRow label="Nível" value={team.level} />
-                <InfoRow label="Faixa etária" value={team.age_group} />
-                <InfoRow label="Professor" value={team.instructor_name} />
+              {/* Info group card */}
+              <div className="overflow-hidden rounded-[14px] bg-surface shadow-sm">
+                <InfoRow icon={UsersRound} label="Turma" value={team.name} />
+                <InfoRow icon={Building2} label="Filial" value={branchName} />
+                <InfoRow
+                  icon={Calendar}
+                  label="Dias e horario"
+                  value={
+                    [team.schedule_days, team.schedule_time?.slice(0, 5)]
+                      .filter(Boolean)
+                      .join(' · ') || undefined
+                  }
+                />
+                <InfoRow icon={BarChart3} label="Nivel" value={team.level} />
+                <InfoRow icon={Cake} label="Faixa etaria" value={team.age_group} />
+                <InfoRow icon={User} label="Professor" value={team.instructor_name} />
               </div>
 
-              <div className="mt-5">
-                <div className="mb-2 flex items-center gap-2 px-0.5">
-                  <Users size={16} className="text-fg-3" />
-                  <h3 className="font-body text-sm font-semibold text-fg-2">
-                    Alunos ({roster?.length ?? 0})
-                  </h3>
+              {/* Enrolled students */}
+              <div className="mt-[22px] flex items-center justify-between px-0.5">
+                <h3 className="font-display text-[16px] font-extrabold text-fg-1">
+                  Alunos matriculados{' '}
+                  <span className="font-body font-medium text-fg-3">
+                    &middot; {roster?.length ?? 0}
+                  </span>
+                </h3>
+                <button
+                  type="button"
+                  className="whitespace-nowrap font-body text-[13px] font-bold text-green-600"
+                >
+                  + Adicionar
+                </button>
+              </div>
+
+              {roster && roster.length > 0 ? (
+                <div className="mt-[10px] flex flex-wrap gap-2">
+                  {roster.map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => navigate(`/students/${s.id}`)}
+                      className="inline-flex items-center gap-[9px] rounded-full border border-border-1 bg-surface py-[5px] pl-[5px] pr-[14px] font-body text-[14px] font-semibold text-fg-1 transition-colors active:bg-sunken"
+                    >
+                      <Avatar name={s.name} size={32} />
+                      {s.name.split(' ')[0]}
+                      <X size={14} className="text-fg-4" />
+                    </button>
+                  ))}
                 </div>
-                {roster && roster.length > 0 ? (
-                  <div className="flex flex-col gap-1.5">
-                    {roster.map((s) => (
-                      <button
-                        key={s.id}
-                        onClick={() => navigate(`/students/${s.id}`)}
-                        className="flex items-center gap-3 rounded-lg border border-border-1 bg-surface px-3 py-2 text-left"
-                      >
-                        <Avatar name={s.name} size={32} />
-                        <span className="flex-1 truncate font-body text-sm font-semibold">{s.name}</span>
-                        {s.position && <span className="text-xs font-bold text-fg-3">{s.position}</span>}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="rounded-lg bg-sunken px-3 py-4 text-center text-sm text-fg-3">
-                    Nenhum aluno nesta turma ainda.
-                  </p>
-                )}
-              </div>
+              ) : (
+                <p className="mt-3 rounded-[14px] bg-sunken px-3 py-4 text-center font-body text-sm text-fg-3">
+                  Nenhum aluno nesta turma ainda.
+                </p>
+              )}
 
-              <div className="mt-5 flex flex-col gap-2">
-                <Button onClick={() => setEditing(true)}>Editar</Button>
-                <Button variant="ghost" className="text-loss" onClick={() => setConfirmDelete(true)}>
+              {/* Actions */}
+              <div className="mt-[22px] flex flex-col gap-[10px]">
+                <Button full size="lg" onClick={() => navigate(`/training?teamId=${id}`)}>
+                  <Play size={18} /> Iniciar treino
+                </Button>
+                <Button
+                  variant="ghost"
+                  full
+                  className="text-loss"
+                  onClick={() => setConfirmDelete(true)}
+                >
                   <Trash2 size={18} /> Excluir turma
                 </Button>
               </div>
@@ -175,7 +232,7 @@ export default function ClassDetail() {
 
       <Sheet open={confirmDelete} onClose={() => setConfirmDelete(false)} title="Excluir turma?">
         <p className="mb-5 font-body text-sm text-fg-2">
-          Esta ação é irreversível. Os alunos não serão excluídos, apenas desvinculados desta turma.
+          Esta acao e irreversivel. Os alunos nao serao excluidos, apenas desvinculados desta turma.
         </p>
         <div className="flex gap-2">
           <Button variant="secondary" full onClick={() => setConfirmDelete(false)}>

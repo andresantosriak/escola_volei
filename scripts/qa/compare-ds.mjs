@@ -28,23 +28,14 @@ const app = await browser.newPage({ viewport: { width: 480, height: 2400 }, devi
 const errs = []
 app.on('console', (m) => m.type() === 'error' && errs.push(m.text()))
 app.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message))
-// Vite pode estar re-otimizando deps logo após um build → retry com reload até montar.
-let mounted = false
-for (let attempt = 1; attempt <= 4 && !mounted; attempt++) {
-  try {
-    await app.goto(`${BASE}/__showcase`, { waitUntil: 'domcontentloaded', timeout: 20000 })
-    await app.waitForSelector('[data-shot]', { timeout: 20000, state: 'attached' })
-    mounted = true
-  } catch {
-    console.log(`… tentativa ${attempt}: showcase ainda não montou, recarregando`)
-    await app.waitForTimeout(3000)
-  }
-}
+// networkidle garante o grafo de módulos do Vite carregado (domcontentloaded fica cedo demais).
+await app.goto(`${BASE}/__showcase`, { waitUntil: 'networkidle', timeout: 30000 })
+await app.waitForTimeout(3000)
+const mounted = (await app.locator('[data-shot]').count()) > 0
 if (!mounted) {
-  console.log('⛔ showcase não montou nenhum [data-shot] após 4 tentativas')
+  console.log('⛔ showcase não montou nenhum [data-shot]')
   if (errs.length) console.log('   erros:', errs.slice(0, 5).join(' | '))
 }
-await app.waitForTimeout(1000)
 for (const [id] of PAIRS) {
   const el = app.locator(`[data-shot="${id}"]`)
   if (await el.count()) {

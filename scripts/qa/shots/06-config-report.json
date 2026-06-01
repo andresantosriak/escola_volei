@@ -1,6 +1,6 @@
 {
   "module": "06-config",
-  "pass": 12,
+  "pass": 11,
   "warn": 0,
   "fail": 0,
   "steps": [
@@ -8,7 +8,7 @@
       "name": "Login do coach de QA",
       "status": "pass",
       "detail": "qa.bot@gmail.com",
-      "ms": 1751
+      "ms": 1717
     },
     {
       "name": "Abrir Fundamentos (técnicos + comportamentais)",
@@ -19,7 +19,7 @@
     {
       "name": "Toggle \"Mostrar pesos\" revela sliders",
       "status": "pass",
-      "detail": "10 sliders",
+      "detail": "9 sliders",
       "ms": null
     },
     {
@@ -44,7 +44,7 @@
       "name": "Trocar tema p/ Escuro aplica data-theme=dark",
       "status": "pass",
       "detail": "",
-      "ms": 736
+      "ms": 741
     },
     {
       "name": "Tema Escuro persiste após reload",
@@ -54,12 +54,6 @@
     },
     {
       "name": "Voltar p/ tema Claro",
-      "status": "pass",
-      "detail": "",
-      "ms": null
-    },
-    {
-      "name": "Alterar preferência de treino (select) persiste",
       "status": "pass",
       "detail": "",
       "ms": null

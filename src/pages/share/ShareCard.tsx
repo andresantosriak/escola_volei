@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Download, Share2 } from 'lucide-react'
-import { Header } from '@/components/layouts/Header'
+import { ScreenHeader } from '@/components/layouts/ScreenHeader'
 import { FullPageSpinner } from '@/components/ui/spinner'
 import { Button } from '@/components/ui/button'
 import { Segmented } from '@/components/ui/tabs'
@@ -16,7 +16,7 @@ import {
 import { useShareImage } from '@/hooks/use-share-image'
 import { useMatch } from '@/hooks/use-matches'
 import { useStudent } from '@/hooks/use-students'
-import { firstName, formatDateFull } from '@/lib/format'
+import { firstName, formatMatchCardDate } from '@/lib/format'
 
 export default function ShareCard() {
   const [params] = useSearchParams()
@@ -37,7 +37,7 @@ export default function ShareCard() {
   if (!matchId && !studentId) {
     return (
       <>
-        <Header title="Compartilhar" back />
+        <ScreenHeader title="Compartilhar" back />
         <p className="p-8 text-center text-sm text-fg-3">Nada para compartilhar.</p>
       </>
     )
@@ -55,8 +55,9 @@ export default function ShareCard() {
       setsA,
       setsB,
       winner: match.winner as 'a' | 'b' | null,
-      setSummary: match.sets.map((s) => `${s.points_a}–${s.points_b}`).join(' · '),
-      date: formatDateFull(match.match_date),
+      setSummary: match.sets.map((s) => `${s.points_a}–${s.points_b}`).join('  ·  '),
+      date: formatMatchCardDate(match.match_date),
+      className: match.team_name,
       balance: match.balance_score,
       rosterA: match.rostersA.map((s) => firstName(s.name)),
       rosterB: match.rostersB.map((s) => firstName(s.name)),
@@ -81,7 +82,7 @@ export default function ShareCard() {
   }
 
   const onShare = async () => {
-    const ok = await share(filename, 'Esporte Recreação')
+    const ok = await share(filename, 'Esporte Recreacao')
     if (ok) toast.success('Imagem pronta!')
   }
   const onDownload = async () => {
@@ -90,74 +91,93 @@ export default function ShareCard() {
   }
 
   return (
-    <>
-      <Header title="Compartilhar" back />
-      <div className="space-y-4 p-4 pb-28">
-        <div className="flex justify-center rounded-xl bg-sunken p-4">
-          <div className="overflow-hidden rounded-xl shadow-lg">
+    <div className="flex min-h-dvh flex-col bg-app">
+      <ScreenHeader title="Compartilhar" back />
+
+      <div className="flex-1 overflow-y-auto pb-28">
+        {/* ---- Preview area ---- */}
+        <div className="flex min-h-[320px] items-center justify-center bg-sunken px-[18px] py-4">
+          <div className="overflow-hidden rounded-[22px]" style={{ boxShadow: 'var(--shadow-card)' }}>
             <SharePreview ref={ref} data={data} format={format} theme={theme} />
           </div>
         </div>
 
-        <div>
-          <p className="mb-1.5 font-body text-xs font-semibold text-fg-3">Formato</p>
+        {/* ---- Options body ---- */}
+        <div className="px-[18px]">
+          {/* Formato */}
+          <p className="mb-[9px] mt-[22px] font-body text-[11px] font-bold uppercase tracking-[.05em] text-fg-3">
+            Formato
+          </p>
           <Segmented
             value={format}
             onChange={(v) => setFormat(v as ShareFormat)}
             options={[
-              { value: 'square', label: 'Quadrado' },
-              { value: 'portrait', label: 'Vertical' },
-              { value: 'landscape', label: 'Paisagem' },
+              { value: 'square', label: 'quadrado' },
+              { value: 'portrait', label: 'vertical' },
+              { value: 'landscape', label: 'paisagem' },
             ]}
           />
-        </div>
 
-        <div>
-          <p className="mb-1.5 font-body text-xs font-semibold text-fg-3">Tema</p>
+          {/* O que incluir (match only) */}
+          {data.kind === 'match' && (
+            <>
+              <p className="mb-[9px] mt-[22px] font-body text-[11px] font-bold uppercase tracking-[.05em] text-fg-3">
+                O que incluir
+              </p>
+              <div className="overflow-hidden rounded-[14px] bg-surface shadow-sm">
+                <OptionRow label="Elencos" checked={includeRosters} onChange={setIncludeRosters} />
+                <OptionRow label="Placar set a set" checked={includeSets} onChange={setIncludeSets} border />
+                <OptionRow label="Indice de equilibrio" checked={includeBalance} onChange={setIncludeBalance} border />
+              </div>
+            </>
+          )}
+
+          {/* Tema */}
+          <p className="mb-[9px] mt-[22px] font-body text-[11px] font-bold uppercase tracking-[.05em] text-fg-3">
+            Tema
+          </p>
           <Segmented
             value={theme}
             onChange={(v) => setTheme(v as ShareTheme)}
             options={[
-              { value: 'green', label: 'Verde' },
-              { value: 'dark', label: 'Escuro' },
-              { value: 'light', label: 'Claro' },
+              { value: 'green', label: 'verde' },
+              { value: 'dark', label: 'escuro' },
+              { value: 'light', label: 'claro' },
             ]}
           />
         </div>
-
-        {data.kind === 'match' && (
-          <div className="flex flex-col gap-3 rounded-lg border border-border-1 bg-surface p-3">
-            <Row label="Incluir elencos" checked={includeRosters} onChange={setIncludeRosters} />
-            <Row label="Incluir sets" checked={includeSets} onChange={setIncludeSets} />
-            <Row label="Incluir equilíbrio" checked={includeBalance} onChange={setIncludeBalance} />
-          </div>
-        )}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 mx-auto flex max-w-[440px] gap-2 border-t border-border-1 bg-surface/95 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur">
+      {/* ---- Bottom dock ---- */}
+      <div className="fixed inset-x-0 bottom-0 z-30 mx-auto flex max-w-[440px] gap-[10px] border-t border-border-1 bg-surface/95 px-[18px] py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur">
         <Button variant="secondary" full onClick={onDownload} disabled={generating}>
           <Download size={18} /> Salvar
         </Button>
         <Button full onClick={onShare} disabled={generating}>
-          <Share2 size={18} /> {generating ? 'Gerando…' : 'Compartilhar'}
+          <Share2 size={18} /> {generating ? 'Gerando...' : 'Compartilhar'}
         </Button>
       </div>
-    </>
+    </div>
   )
 }
 
-function Row({
+/* ---- Toggle row inside "O que incluir" card ---- */
+function OptionRow({
   label,
   checked,
   onChange,
+  border,
 }: {
   label: string
   checked: boolean
   onChange: (v: boolean) => void
+  border?: boolean
 }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="font-body text-sm">{label}</span>
+    <div
+      className={`flex items-center justify-between px-[14px] py-[13px] ${border ? 'border-t border-border-1' : ''}`}
+    >
+      <span className="font-body text-[15px] font-semibold text-fg-1">{label}</span>
       <Switch checked={checked} onCheckedChange={onChange} aria-label={label} />
     </div>
   )

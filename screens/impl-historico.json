@@ -1,0 +1,1 @@
+{"screen":"historico","files":["src/pages/history/MatchHistory.tsx"],"tsOk":true,"changes":"Replaced inline header with ScreenHeader + IconButton (Filter icon). Switched from SlidersHorizontal to Filter icon to match print. Preserved all hooks, filter state, navigation, loading/error/empty states. FilterChips, FilterSubSelector and ResultCard unchanged."}

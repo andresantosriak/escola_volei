@@ -14,10 +14,19 @@ export interface EnginePlayer {
 
 export type AssemblyMode = 'competitive' | 'development'
 
+/**
+ * Política de quem descansa quando há mais presentes do que vagas:
+ * - 'bench'    → reservas naturais: os de maior overall jogam sempre; só a fronteira rotaciona.
+ * - 'rotation' → rodízio justo: a cada montagem todos têm chance de descansar (banco rotaciona).
+ */
+export type BenchPolicy = 'bench' | 'rotation'
+
 export interface BuildOptions {
   mode: AssemblyMode
   /** jogadores por time (ex: 6 para 6x6) */
   size: number
+  /** política de banco/rodízio (default 'bench') */
+  benchPolicy?: BenchPolicy
   /** semente para RNG determinística (testes/reprodutibilidade) */
   seed?: number
 }

@@ -17,23 +17,29 @@ export function TeamPanel({ side, name, onRename, team, onPlayerTap }: TeamPanel
     : 0
   const hasLev = team.some((p) => p.position === 'LEV')
 
+  const headerBg = side === 'A' ? 'bg-green-500' : 'bg-ink-700'
+
   return (
-    <div className="flex-1 rounded-lg border border-border-1 bg-surface p-3">
-      <div className="mb-2 flex items-center gap-2">
+    <div className="flex-1 overflow-hidden rounded-lg border border-border-1 bg-surface">
+      {/* Colored header bar */}
+      <div
+        className={`flex items-center gap-2 rounded-t-lg px-3 py-2.5 ${headerBg}`}
+      >
         {side === 'A' ? (
-          <Flame size={18} className="text-[#F08C00]" />
+          <Flame size={18} className="shrink-0 text-white" />
         ) : (
-          <Anchor size={18} className="text-ink-600" />
+          <Anchor size={18} className="shrink-0 text-white" />
         )}
         <input
           value={name}
           onChange={(e) => onRename(e.target.value)}
           spellCheck={false}
-          className="w-full bg-transparent font-body text-sm font-bold text-fg-1 outline-none"
+          className="w-full bg-transparent font-display text-[17px] font-bold text-white outline-none placeholder:text-white/60"
         />
       </div>
 
-      <div className="flex flex-col gap-1">
+      {/* Player list */}
+      <div className="flex flex-col gap-1 p-3">
         {team.map((p) => (
           <button
             key={p.id}
@@ -47,13 +53,14 @@ export function TeamPanel({ side, name, onRename, team, onPlayerTap }: TeamPanel
                 LEV
               </span>
             )}
-            <span className="font-stat text-sm font-bold tabular-nums text-fg-2">{p.overall}</span>
+            <span className="font-num text-sm font-bold tabular-nums text-green-600">{p.overall}</span>
           </button>
         ))}
         {team.length === 0 && <p className="py-2 text-center text-xs text-fg-4">Vazio</p>}
       </div>
 
-      <div className="mt-2 flex flex-wrap gap-1.5 border-t border-border-1 pt-2 text-[11px]">
+      {/* Footer chips */}
+      <div className="mx-3 flex flex-wrap gap-1.5 border-t border-border-1 pb-3 pt-2 text-[11px]">
         <span className="rounded bg-sunken px-1.5 py-0.5 font-semibold text-fg-2">
           Geral <b>{avgOverall}</b>
         </span>

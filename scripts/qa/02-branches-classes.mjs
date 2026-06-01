@@ -25,11 +25,11 @@ try {
   rep.step('Validação: filial sem nome bloqueia', (await expectMatch(page, /informe o nome/i, 3000)) ? 'pass' : 'fail')
 
   // preencher tudo
-  await page.fill('input[placeholder="Unidade Centro"]', branchName)
-  await page.fill('input[placeholder="São Paulo · Centro"]', 'Cidade QA')
-  await page.fill('input[placeholder="Rua das Quadras, 120"]', 'Rua QA, 100')
-  await page.fill('input[placeholder="(11) 3344-1200"]', '(11) 99999-0000')
-  await page.fill('input[placeholder="Téc. Marcos Lima"]', 'Resp. QA')
+  await page.fill('input[placeholder="Ex.: Unidade Centro"]', branchName)
+  await page.fill('input[placeholder="Ex.: São Paulo · Centro"]', 'Cidade QA')
+  await page.fill('input[placeholder="Rua, número"]', 'Rua QA, 100')
+  await page.fill('input[placeholder="(11) 0000-0000"]', '(11) 99999-0000')
+  await page.fill('input[placeholder="Nome"]', 'Resp. QA')
   t0 = Date.now()
   await page.click('button:has-text("Salvar")')
   const created = await expectMatch(page, /Filial criada/i, 8000) // toast = sinal confiável
@@ -45,7 +45,7 @@ try {
   // editar
   await page.click('button:has-text("Editar")')
   await sleep(400)
-  await page.fill('input[placeholder="São Paulo · Centro"]', 'Cidade QA Editada')
+  await page.fill('input[placeholder="Ex.: São Paulo · Centro"]', 'Cidade QA Editada')
   await page.click('button:has-text("Salvar")')
   rep.step('Editar filial e salvar', (await expectMatch(page, /Filial atualizada/i, 8000)) ? 'pass' : 'fail')
 
@@ -55,12 +55,12 @@ try {
 
   await go(page, '/manage/classes/new')
   await expectText(page, 'Nome')
-  await page.fill('input[placeholder="Sub-17 Masculino"]', className)
+  await page.fill('input[placeholder="Ex.: Sub-17 Masculino"]', className)
   const branchSelect = page.locator('select').first()
   await branchSelect.selectOption({ label: branchName }).catch(() => branchSelect.selectOption({ index: 1 }))
-  await page.fill('input[placeholder="Seg · Qua · Sex"]', 'Ter · Qui')
-  await page.fill('input[placeholder="15–17 anos"]', '14-16 anos')
-  await page.fill('input[placeholder="Téc. Marcos"]', 'Prof QA')
+  await page.fill('input[placeholder="Seg . Qua . Sex"]', 'Ter · Qui')
+  await page.fill('input[placeholder="15-17 anos"]', '14-16 anos')
+  await page.fill('input[placeholder="Nome"]', 'Prof QA')
   t0 = Date.now()
   await page.click('button:has-text("Salvar")')
   const classCreated = await expectMatch(page, /Turma criada/i, 8000)
@@ -70,7 +70,7 @@ try {
 
   // detalhe da turma (roster)
   await page.click(`text=${className}`)
-  rep.step('Detalhe da turma mostra seção de alunos', (await expectMatch(page, /Alunos \(/, 8000)) ? 'pass' : 'fail')
+  rep.step('Detalhe da turma mostra seção de alunos', (await expectMatch(page, /Alunos matriculados/i, 8000)) ? 'pass' : 'fail')
   await rep.shot(page, 'class-detail')
 
   // --- LOCK RN06 ---

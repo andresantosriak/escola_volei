@@ -1,0 +1,44 @@
+{
+  "module": "07-edge-responsive",
+  "pass": 6,
+  "warn": 0,
+  "fail": 0,
+  "steps": [
+    {
+      "name": "Exportar CSV: download capturado + cabeçalho correto",
+      "status": "pass",
+      "detail": "alunos-esporte-recreacao.csv, 34 linhas",
+      "ms": null
+    },
+    {
+      "name": "Responsivo @ 320px — sem overflow horizontal",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Responsivo @ 375px — sem overflow horizontal",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Responsivo @ 390px — sem overflow horizontal",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Responsivo @ 428px — sem overflow horizontal",
+      "status": "pass",
+      "detail": "",
+      "ms": null
+    },
+    {
+      "name": "Edge: turma com 2 alunos → \"Montar times\" desabilitado",
+      "status": "pass",
+      "detail": "mensagem de mínimo exibida",
+      "ms": null
+    }
+  ]
+}

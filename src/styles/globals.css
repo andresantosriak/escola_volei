@@ -133,24 +133,65 @@
 
 /* ---- Role tokens: DARK (navy surfaces, brand realçado, nunca preto puro) ---- */
 [data-theme='dark'] {
-  --app: #0b1220;
-  --surface: #141d2e;
-  --surface-2: #1b263b;
-  --sunken: #0b1220;
-  --ink-surface: #07204f;
-  --border-1: #2a3650;
-  --border-2: #36456a;
-  --border-3: #44557f;
-  --fg-1: #f2f5f9;
-  --fg-2: #c2ccd9;
-  --fg-3: #8a99ac;
-  --fg-4: #5d6b80;
-  --ring-color: #1bae57;
-  --shadow-sm: none;
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.55);
-  --shadow-cta: 0 6px 18px rgba(0, 156, 59, 0.4);
+  /* surfaces */
+  --app: #0b1422;
+  --surface: #15203a;
+  --surface-2: #1a2742;
+  --sunken: #1e2a47;
+  --ink-surface: #0e1830;
+  /* text */
+  --fg-1: #ecf1f8;
+  --fg-2: #b6c2d6;
+  --fg-3: #94a2bc;
+  --fg-4: #6e7e99;
+  /* borders — translucent white for adaptability */
+  --border-1: rgba(255, 255, 255, 0.08);
+  --border-2: rgba(255, 255, 255, 0.14);
+  --border-3: rgba(255, 255, 255, 0.22);
+  /* focus ring */
+  --ring-color: #2dd46e;
+  /* elevation — lean on surface diff; shadows subtle */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 14px 32px rgba(0, 0, 0, 0.55);
+  --shadow-card: 0 18px 44px rgba(0, 0, 0, 0.6);
+  --shadow-cta: 0 8px 20px rgba(31, 184, 91, 0.35);
+  /* brand greens — brighter to read on dark surfaces */
+  --color-green-50: rgba(45, 212, 110, 0.14);
+  --color-green-100: rgba(45, 212, 110, 0.22);
+  --color-green-500: #1fb85b;
+  --color-green-600: #2dd46e;
+  --color-green-700: #5fe195;
+  /* gold stays close */
+  --color-yellow-400: #f5c518;
+  --color-yellow-500: #e9bb12;
+  /* deep navy */
+  --color-ink-800: #0e1830;
+  --color-ink-700: #15326e;
+  /* state — weak translucent backgrounds, hues lifted */
+  --color-win-bg: rgba(45, 212, 110, 0.15);
+  --color-win-500: #2dd46e;
+  --color-win-700: #7de7ac;
+  --color-win: #2dd46e;
+  --color-loss-bg: rgba(255, 107, 107, 0.15);
+  --color-loss-500: #ff6b6b;
+  --color-loss-700: #ff9d9d;
+  --color-loss: #ff6b6b;
+  --color-warn-bg: rgba(245, 180, 80, 0.16);
+  --color-warn-500: #f5b450;
+  --color-warn-700: #f8c982;
+  --color-warn: #f5b450;
+  --color-bal-bg: rgba(90, 166, 255, 0.15);
+  --color-bal-500: #5aa6ff;
+  --color-bal-700: #93c4ff;
+  --color-bal: #5aa6ff;
+  /* grays used directly in chrome */
+  --color-gray-0: #15203a;
+  --color-gray-50: #1e2a47;
+  --color-gray-100: #1e2a47;
+  --color-gray-200: rgba(255, 255, 255, 0.1);
+  --color-gray-300: #3a4768;
+  --color-gray-400: #5c6b85;
 }
 
 /* ---- Base ---- */

@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
-import { Plus, ChevronUp, ChevronDown } from 'lucide-react'
+import { GripVertical, Info, Plus } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Header } from '@/components/layouts/Header'
+import { ScreenHeader } from '@/components/layouts/ScreenHeader'
 import { FullPageSpinner } from '@/components/ui/spinner'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
@@ -13,12 +13,19 @@ import { useSkillsConfig, useSkillsConfigMutations } from '@/hooks/use-skills-co
 import { skillsConfigService } from '@/services/skills-config-service'
 import type { SkillConfig } from '@/types/domain'
 
+const SCALE_OPTIONS = [
+  { value: '3', label: '1 a 3' },
+  { value: '5', label: '1 a 5' },
+  { value: '10', label: '1 a 10' },
+]
+
 export default function Skills() {
   const { data: skills, isLoading } = useSkillsConfig()
   const { create, update } = useSkillsConfigMutations()
   const qc = useQueryClient()
 
   const [showWeights, setShowWeights] = useState(false)
+  const [scale, setScale] = useState('5')
   const [addOpen, setAddOpen] = useState(false)
   const [newLabel, setNewLabel] = useState('')
   const [newKind, setNewKind] = useState<'technical' | 'soft'>('technical')
@@ -26,7 +33,7 @@ export default function Skills() {
   const technical = useMemo(() => (skills ?? []).filter((s) => s.kind === 'technical'), [skills])
   const soft = useMemo(() => (skills ?? []).filter((s) => s.kind === 'soft'), [skills])
 
-  if (isLoading) return <FullPageSpinner label="Carregando fundamentos…" />
+  if (isLoading) return <FullPageSpinner label="Carregando fundamentos..." />
 
   const toggleActive = (s: SkillConfig) => {
     const sameKindActive = (s.kind === 'technical' ? technical : soft).filter((x) => x.active)
@@ -67,85 +74,142 @@ export default function Skills() {
     }
   }
 
-  const renderSection = (title: string, list: SkillConfig[]) => (
+  const renderRow = (s: SkillConfig, list: SkillConfig[], idx: number) => (
+    <div
+      key={s.id}
+      className="bg-surface px-[14px] py-3"
+      style={{ borderTop: idx > 0 ? '1px solid var(--border-1)' : undefined }}
+    >
+      <div className="flex items-center gap-3">
+        {/* Drag handle */}
+        <button
+          type="button"
+          className="shrink-0 text-fg-4 active:text-fg-3"
+          aria-label="Reordenar"
+          onClick={() => move(list, idx, idx > 0 ? -1 : 1)}
+        >
+          <GripVertical size={18} />
+        </button>
+
+        {/* Label */}
+        <span
+          className={
+            'flex-1 font-body text-[15px] font-semibold ' +
+            (s.active ? 'text-fg-1' : 'text-fg-4 italic')
+          }
+        >
+          {s.label}
+        </span>
+
+        {/* Weight badge */}
+        {showWeights && s.active && (
+          <span className="rounded-full bg-green-50 px-2 py-0.5 font-body text-[11px] font-bold text-green-600">
+            x{Number(s.weight).toFixed(1)}
+          </span>
+        )}
+
+        {/* Toggle switch */}
+        <Switch
+          checked={s.active}
+          onCheckedChange={() => toggleActive(s)}
+          aria-label={`Ativar ${s.label}`}
+        />
+      </div>
+
+      {/* Inline weight slider (only when showWeights is on and skill is active) */}
+      {showWeights && s.active && (
+        <div className="mt-2 flex items-center gap-2 pl-[30px]">
+          <span className="font-body text-[11px] text-fg-3">Peso</span>
+          <input
+            type="range"
+            min={0.5}
+            max={2}
+            step={0.1}
+            value={s.weight}
+            onChange={(e) => changeWeight(s, Number(e.target.value))}
+            className="flex-1 accent-green-500"
+          />
+          <span className="w-8 text-right font-num text-[13px] font-bold tabular-nums">
+            {Number(s.weight).toFixed(1)}
+          </span>
+        </div>
+      )}
+    </div>
+  )
+
+  const renderSection = (title: string, list: SkillConfig[], showWeightToggle?: boolean) => (
     <div>
-      <h3 className="mb-2 px-0.5 font-body text-sm font-bold text-fg-2">{title}</h3>
-      <div className="flex flex-col gap-1.5">
-        {list.map((s, idx) => (
-          <div key={s.id} className="rounded-lg border border-border-1 bg-surface px-3 py-2.5">
-            <div className="flex items-center gap-2">
-              <div className="flex flex-col">
-                <button
-                  onClick={() => move(list, idx, -1)}
-                  disabled={idx === 0}
-                  className="text-fg-4 disabled:opacity-30"
-                  aria-label="Mover para cima"
-                >
-                  <ChevronUp size={16} />
-                </button>
-                <button
-                  onClick={() => move(list, idx, 1)}
-                  disabled={idx === list.length - 1}
-                  className="text-fg-4 disabled:opacity-30"
-                  aria-label="Mover para baixo"
-                >
-                  <ChevronDown size={16} />
-                </button>
-              </div>
-              <span className="flex-1 font-body text-sm font-semibold">{s.label}</span>
-              <Switch
-                checked={s.active}
-                onCheckedChange={() => toggleActive(s)}
-                aria-label={`Ativar ${s.label}`}
-              />
-            </div>
-            {showWeights && s.active && (
-              <div className="mt-2 flex items-center gap-2">
-                <span className="text-xs text-fg-3">Peso</span>
-                <input
-                  type="range"
-                  min={0.5}
-                  max={2}
-                  step={0.1}
-                  value={s.weight}
-                  onChange={(e) => changeWeight(s, Number(e.target.value))}
-                  className="flex-1 accent-green-500"
-                />
-                <span className="w-8 text-right font-stat text-sm font-bold tabular-nums">
-                  {Number(s.weight).toFixed(1)}
-                </span>
-              </div>
-            )}
-          </div>
-        ))}
+      <div className="mb-[9px] mt-[22px] flex items-center justify-between px-1">
+        <span className="font-body text-[11px] font-bold uppercase tracking-[0.05em] text-fg-3">
+          {title}
+        </span>
+        {showWeightToggle && (
+          <span className="flex items-center gap-[7px] font-body text-[11.5px] font-semibold text-fg-3">
+            <span className="text-right leading-tight">
+              Mostrar<br />pesos
+            </span>
+            <Switch
+              checked={showWeights}
+              onCheckedChange={setShowWeights}
+              aria-label="Mostrar pesos"
+            />
+          </span>
+        )}
+      </div>
+      <div className="overflow-hidden rounded-[14px] shadow-sm">
+        {list.map((s, idx) => renderRow(s, list, idx))}
       </div>
     </div>
   )
 
   return (
     <>
-      <Header
+      <ScreenHeader
         title="Fundamentos"
+        subtitle="Configurar avaliação"
         back
-        right={
-          <Button size="sm" variant="ghost" onClick={() => setAddOpen(true)}>
-            <Plus size={18} />
-          </Button>
-        }
       />
-      <div className="space-y-5 p-4">
-        <div className="flex items-center justify-between rounded-lg bg-sunken px-3 py-2.5">
-          <span className="font-body text-sm font-semibold">Mostrar pesos (avançado)</span>
-          <Switch checked={showWeights} onCheckedChange={setShowWeights} aria-label="Mostrar pesos" />
+
+      <div className="space-y-0 px-[18px] pb-8 pt-1">
+        {/* Info card */}
+        <div className="mb-[6px] flex gap-[10px] rounded-[14px] bg-surface p-[13px_15px] shadow-sm">
+          <Info size={18} className="mt-0.5 shrink-0 text-green-600" />
+          <p className="font-body text-[12.5px] leading-[1.4] text-fg-2">
+            Define o que aparece na <b>Avaliação rápida</b> e o que entra no cálculo de{' '}
+            <b>equilíbrio dos times</b>.
+          </p>
         </div>
-        {renderSection('Técnicos', technical)}
-        {renderSection('Comportamental', soft)}
-        <p className="px-1 text-xs text-fg-4">
-          Fundamentos técnicos ativos alimentam o cálculo do "Geral" e o balanceador de times. A
-          chave interna de cada fundamento é imutável após a criação.
+
+        {/* Scale selector */}
+        <div className="mt-[22px] px-1">
+          <span className="font-body text-[11px] font-bold uppercase tracking-[0.05em] text-fg-3">
+            Escala de avaliação
+          </span>
+        </div>
+        <div className="mt-[9px]">
+          <Segmented options={SCALE_OPTIONS} value={scale} onChange={setScale} />
+        </div>
+
+        {/* Technical skills */}
+        {renderSection('Técnicos', technical, true)}
+
+        {/* Soft skills */}
+        {renderSection('Comportamentais', soft)}
+
+        {/* Bottom CTA */}
+        <div className="mt-4">
+          <Button full variant="secondary" onClick={() => setAddOpen(true)}>
+            <Plus size={18} />
+            Adicionar fundamento
+          </Button>
+        </div>
+
+        <p className="mt-3 text-center font-body text-[11.5px] text-fg-4">
+          Ao menos um fundamento precisa permanecer ativo.
         </p>
       </div>
 
+      {/* Sheet: add new skill */}
       <Sheet open={addOpen} onClose={() => setAddOpen(false)} title="Novo fundamento">
         <div className="mb-3">
           <p className="mb-1.5 font-body text-xs font-semibold text-fg-3">Categoria</p>
@@ -166,6 +230,7 @@ export default function Skills() {
           Adicionar
         </Button>
       </Sheet>
+
     </>
   )
 }

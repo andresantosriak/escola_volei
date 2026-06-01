@@ -5,16 +5,24 @@ import type { AttendanceStatus } from '@/lib/constants'
 // Fiel a design-system/preview/comp-presenca.html (.seg/.opt):
 // container pill branco (gray-0) com borda border-2; TODAS as opções mostram o label sempre;
 // a ativa ganha fundo colorido + ícone (presente=win-500, falta=loss-500, atraso=warn-500).
-const OPTIONS: { value: AttendanceStatus; icon: typeof Check; label: string; on: string }[] = [
-  { value: 'present', icon: Check, label: 'Presente', on: 'bg-win-500 text-white' },
-  { value: 'absent', icon: X, label: 'Falta', on: 'bg-loss-500 text-white' },
-  { value: 'late', icon: Clock, label: 'Atraso', on: 'bg-warn-500 text-white' },
+// Compact mode: ativa = pill colorido com ícone + label completo;
+//               inativas = botão 40x40 com inicial do label (P/F/A) em text-fg-3.
+const OPTIONS: {
+  value: AttendanceStatus
+  icon: typeof Check
+  label: string
+  initial: string
+  on: string
+}[] = [
+  { value: 'present', icon: Check, label: 'Presente', initial: 'P', on: 'bg-win-500 text-white' },
+  { value: 'absent', icon: X, label: 'Falta', initial: 'F', on: 'bg-loss-500 text-white' },
+  { value: 'late', icon: Clock, label: 'Atraso', initial: 'A', on: 'bg-warn-500 text-white' },
 ]
 
 interface PresenceToggleProps {
   value: AttendanceStatus
   onChange: (v: AttendanceStatus) => void
-  /** versão compacta (só ícone nas inativas) p/ telas estreitas como a chamada em lista */
+  /** versão compacta: ativa = pill com ícone+label; inativas = inicial (P/F/A) */
   compact?: boolean
 }
 
@@ -47,7 +55,11 @@ export function PresenceToggle({ value, onChange, compact }: PresenceToggleProps
             }
           >
             {active && <Icon size={18} />}
-            {showLabel && <span>{o.label}</span>}
+            {showLabel ? (
+              <span>{o.label}</span>
+            ) : (
+              <span className="text-[14px] font-bold text-fg-3">{o.initial}</span>
+            )}
           </button>
         )
       })}

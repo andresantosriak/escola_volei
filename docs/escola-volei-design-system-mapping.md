@@ -79,6 +79,8 @@ Validação: QA E2E dos módulos afetados (04 treino, 05 histórico, 08 edge) = 
 1. **Chips de avatar:** o portrait grande do PlayerCard usa o gradiente verde do preview; os **chips pequenos** (listas/rosters) usam cor determinística por nome — conforme `README` do DS ("deterministic color from the name").
 2. **PresenceToggle na tela de Chamada:** usa `compact` (label só no ativo) por densidade de lista em 390px; o **componente isolado** e o preview mostram todos os labels.
 3. **Logos oficiais:** `design-system/assets/logo-mark.svg` e `app-icon.svg` existem; o header usa um ícone inline equivalente. Embutir os SVGs oficiais fica para v2.
+4. **Iniciais do avatar:** o preview crava "BR" (2 primeiras letras de "Bruno"); o app deriva iniciais primeiro+último nome ("Bruno Almeida" → "BA"), padrão consistente em todo o app. O "BR" do preview é mock (incoerente com o nome "Almeida" que ele próprio mostra). Tamanho, forma, cor, borda e fonte do avatar são idênticos — só as 2 letras divergem por serem derivadas do dado real.
+5. **Dia da semana no card de resultado:** o preview crava "TER" (mock); o app calcula o dia real (2026-05-27 = QUA). O **formato** foi alinhado ao preview via `formatMatchCardDate` ("ddd · DD mmm", middot, sem ano/pontos, uppercase por CSS). Só o valor do weekday difere, por ser derivado da data real.
 
 ## 6. Como re-auditar visualmente
 - `node scripts/qa/compare-ds.mjs` (com dev server de pé) → gera os pares `scripts/qa/shots/compare/app-*.png` × `prev-*.png`.

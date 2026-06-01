@@ -7,6 +7,7 @@ export type {
   BuildOptions,
   BuildResult,
   AssemblyMode,
+  BenchPolicy,
   Tier,
   TierCounts,
 } from './types'

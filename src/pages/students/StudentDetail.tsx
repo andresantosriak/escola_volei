@@ -3,8 +3,15 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { Trash2, TriangleAlert, Share2 } from 'lucide-react'
-import { Header } from '@/components/layouts/Header'
+import {
+  Camera,
+  ChevronLeft,
+  Share2,
+  Trash2,
+  TriangleAlert,
+  Trophy,
+  UserCheck,
+} from 'lucide-react'
 import { FullPageSpinner } from '@/components/ui/spinner'
 import { Tabs } from '@/components/ui/tabs'
 import { Field } from '@/components/ui/field'
@@ -13,6 +20,7 @@ import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { Sheet } from '@/components/ui/sheet'
 import { PlayerCard } from '@/components/students/PlayerCard'
+import { Avatar } from '@/components/students/Avatar'
 import { PositionField } from '@/components/students/PositionField'
 import { StatBadge } from '@/components/students/StatBadge'
 import { studentSchema, type StudentInput } from '@/schemas/student-schema'
@@ -23,6 +31,43 @@ import { useClasses } from '@/hooks/use-classes'
 const TAB_DADOS = 'Dados'
 const TAB_DESEMPENHO = 'Desempenho'
 
+/* ---------- Evolution mini chart ---------- */
+function EvolutionChart({ values }: { values: number[] }) {
+  if (values.length === 0) return null
+  const minVal = Math.min(...values)
+  const maxVal = Math.max(...values)
+  const range = Math.max(maxVal - minVal, 10)
+
+  return (
+    <div
+      className="rounded-[18px] bg-surface p-4 shadow-sm"
+      style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 120 }}
+    >
+      {values.map((v, i) => (
+        <div
+          key={i}
+          className="flex flex-1 flex-col items-center"
+          style={{ gap: 6 }}
+        >
+          <div
+            style={{
+              width: '100%',
+              height: `${Math.max(((v - minVal + 4) / (range + 8)) * 76, 8)}px`,
+              background:
+                i === values.length - 1
+                  ? 'var(--color-green-500)'
+                  : 'var(--color-green-200)',
+              borderRadius: 6,
+            }}
+          />
+          <span className="font-num text-[10px] font-bold text-fg-4">{v}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/* ================================================================ */
 export default function StudentDetail() {
   const { id } = useParams()
   const isNew = !id || id === 'new'
@@ -92,18 +137,196 @@ export default function StudentDetail() {
   const classOptions = (classes ?? []).map((c) => ({ value: c.id, label: c.name }))
   const insufficient = !isNew && student && student.total_matches < MIN_MATCHES_FOR_STATS
 
+  /* ---------- derived stats for Desempenho ---------- */
+  const totalMatches = student ? student.wins + student.losses : 0
+  const approvalPct = totalMatches > 0 ? Math.round((student!.wins / totalMatches) * 100) : 0
+
+  // Placeholder evolution data (would come from evaluation history when available)
+  const evolutionValues = student
+    ? [62, 64, 63, 68, 72, 70, student.overall]
+    : []
+
   return (
     <>
-      <Header title={isNew ? 'Novo aluno' : student?.name || 'Aluno'} back />
-      <div className="p-4">
-        {!isNew && (
-          <Tabs tabs={[TAB_DADOS, TAB_DESEMPENHO]} active={tab} onChange={setTab} className="mb-4" />
-        )}
+      {/* ---- Dark header area (ink-800) ---- */}
+      <div className="bg-ink-800">
+        {/* Header row */}
+        <header className="flex items-center gap-2 px-[18px] pb-3 pt-5">
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            aria-label="Voltar"
+            className="flex size-[40px] shrink-0 items-center justify-center rounded-full text-white"
+            style={{ background: 'rgba(255,255,255,.12)' }}
+          >
+            <ChevronLeft size={22} />
+          </button>
+          <div className="min-w-0 flex-1">
+            <h1 className="font-display text-[20px] font-extrabold text-white">
+              Perfil do aluno
+            </h1>
+          </div>
+          {!isNew && student && (
+            <button
+              type="button"
+              onClick={() => navigate(`/share?student=${student.id}`)}
+              aria-label="Compartilhar"
+              className="flex size-[40px] shrink-0 items-center justify-center rounded-full text-white"
+              style={{ background: 'rgba(255,255,255,.12)' }}
+            >
+              <Share2 size={19} />
+            </button>
+          )}
+        </header>
 
-        {(isNew || tab === TAB_DADOS) && (
+        {/* Tabs inside dark area */}
+        {!isNew && (
+          <div className="px-[18px] pb-[14px]">
+            <Tabs tabs={[TAB_DADOS, TAB_DESEMPENHO]} active={tab} onChange={setTab} />
+          </div>
+        )}
+      </div>
+
+      {/* ---- Desempenho tab ---- */}
+      {!isNew && tab === TAB_DESEMPENHO && student && (
+        <>
+          {/* PlayerCard in dark container */}
+          <div className="bg-ink-800 px-[18px] pb-[22px]">
+            <PlayerCard
+              player={{
+                name: student.name,
+                position: student.position,
+                overall: student.overall,
+                age: student.age,
+                heightCm: student.height_cm,
+                dominantHand: student.dominant_hand,
+                wins: student.wins,
+                losses: student.losses,
+                skills: student.skills,
+                photoUrl: student.photo_url,
+              }}
+            />
+          </div>
+
+          {/* Light content area */}
+          <div className="px-[18px] pt-[18px] pb-6">
+            {insufficient ? (
+              <div className="flex items-start gap-3 rounded-[18px] bg-surface p-4 shadow-sm">
+                <TriangleAlert size={20} className="mt-0.5 shrink-0 text-warn" />
+                <p className="font-body text-[13.5px] leading-[1.45] text-fg-2">
+                  <b>Amostra insuficiente.</b> Jogue mais treinos para liberar notas
+                  confiáveis (mínimo de {MIN_MATCHES_FOR_STATS} partidas).
+                </p>
+              </div>
+            ) : (
+              <>
+                {/* Stat badges row */}
+                <div className="flex flex-wrap gap-[9px]">
+                  <StatBadge
+                    value={`${student.wins}V`}
+                    label="vitórias"
+                    tone="win"
+                    icon={Trophy}
+                  />
+                  <StatBadge
+                    value={`${student.losses}D`}
+                    label="derrotas"
+                    tone="loss"
+                  />
+                  <StatBadge
+                    value={`${approvalPct}%`}
+                    label="aproveit."
+                    tone="bal"
+                  />
+                  <StatBadge
+                    value="89%"
+                    label="presença"
+                    tone="neutral"
+                    icon={UserCheck}
+                  />
+                </div>
+
+                {/* Evolution section */}
+                <div className="mt-6 flex items-baseline justify-between">
+                  <h3 className="q-label">
+                    Evolução · {evolutionValues.length} treinos
+                  </h3>
+                </div>
+                <div className="mt-3">
+                  <EvolutionChart values={evolutionValues} />
+                </div>
+
+                {/* Recent matches */}
+                <div className="mt-6 flex items-baseline justify-between">
+                  <h3 className="q-label">Partidas recentes</h3>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/history')}
+                    className="font-body text-[13px] font-semibold text-green-500"
+                  >
+                    Ver tudo
+                  </button>
+                </div>
+                <div className="mt-3 flex flex-col gap-2">
+                  {/* Placeholder — would use student-specific match history */}
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* ---- Dados tab (or new student) ---- */}
+      {(isNew || tab === TAB_DADOS) && (
+        <div className="px-[18px] pt-[18px] pb-6">
+          {/* Avatar + change photo */}
+          {!isNew && student && (
+            <div className="mb-5 flex items-center gap-[14px]">
+              <Avatar
+                name={student.name}
+                size={64}
+                photoUrl={student.photo_url}
+              />
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  /* photo change — future */
+                }}
+              >
+                <Camera size={18} /> Trocar foto
+              </Button>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <Field label="Nome *" error={errors.name?.message}>
+            <Field error={errors.name?.message}>
+              <span className="q-label mb-1.5 block">Nome completo</span>
               <Input placeholder="Bruno Almeida" {...register('name')} />
+            </Field>
+
+            <div className="flex gap-3">
+              <Field className="flex-1" error={errors.age?.message}>
+                <span className="q-label mb-1.5 block">Idade</span>
+                <Input type="number" inputMode="numeric" placeholder="16" {...register('age')} />
+              </Field>
+              <Field className="flex-1" error={errors.height_cm?.message}>
+                <span className="q-label mb-1.5 block">Altura (cm)</span>
+                <Input
+                  type="number"
+                  inputMode="numeric"
+                  placeholder="182"
+                  {...register('height_cm')}
+                />
+              </Field>
+            </div>
+
+            <Field>
+              <span className="q-label mb-1.5 block">Mão dominante</span>
+              <Select
+                placeholder="Não informado"
+                options={DOMINANT_HANDS.map((h) => ({ value: h, label: h }))}
+                {...register('dominant_hand')}
+              />
             </Field>
 
             <Controller
@@ -125,28 +348,12 @@ export default function StudentDetail() {
               )}
             />
 
-            <div className="flex gap-3">
-              <Field label="Idade" className="flex-1" error={errors.age?.message}>
-                <Input type="number" inputMode="numeric" placeholder="16" {...register('age')} />
-              </Field>
-              <Field label="Altura (cm)" className="flex-1" error={errors.height_cm?.message}>
-                <Input type="number" inputMode="numeric" placeholder="182" {...register('height_cm')} />
-              </Field>
-            </div>
-
-            <Field label="Mão dominante">
-              <Select
-                placeholder="Não informado"
-                options={DOMINANT_HANDS.map((h) => ({ value: h, label: h }))}
-                {...register('dominant_hand')}
-              />
-            </Field>
-
             <Controller
               control={control}
               name="team_ids"
               render={({ field }) => (
-                <Field label="Turmas">
+                <Field>
+                  <span className="q-label mb-1.5 block">Turma(s)</span>
                   <div className="flex flex-col gap-1.5">
                     {classOptions.length === 0 && (
                       <p className="text-sm text-fg-4">Nenhuma turma cadastrada.</p>
@@ -184,13 +391,16 @@ export default function StudentDetail() {
               )}
             />
 
-            <Field label="Responsável (LGPD — menores)">
+            <Field>
+              <span className="q-label mb-1.5 block">Responsável (LGPD — menores)</span>
               <Input placeholder="Nome do responsável" {...register('guardian_name')} />
             </Field>
-            <Field label="Telefone do responsável">
+            <Field>
+              <span className="q-label mb-1.5 block">Telefone do responsável</span>
               <Input placeholder="(11) 90000-0000" {...register('guardian_phone')} />
             </Field>
-            <Field label="Observações">
+            <Field>
+              <span className="q-label mb-1.5 block">Observações</span>
               <Textarea placeholder="Notas sobre o aluno…" {...register('notes')} />
             </Field>
 
@@ -210,52 +420,8 @@ export default function StudentDetail() {
               )}
             </div>
           </form>
-        )}
-
-        {!isNew && tab === TAB_DESEMPENHO && student && (
-          <div>
-            <PlayerCard
-              player={{
-                name: student.name,
-                position: student.position,
-                overall: student.overall,
-                age: student.age,
-                heightCm: student.height_cm,
-                dominantHand: student.dominant_hand,
-                wins: student.wins,
-                losses: student.losses,
-                skills: student.skills,
-                photoUrl: student.photo_url,
-              }}
-            />
-
-            {insufficient ? (
-              <div className="mt-4 flex items-start gap-3 rounded-lg bg-[#FFF0DD] p-4">
-                <TriangleAlert size={20} className="mt-0.5 shrink-0 text-[#A85A00]" />
-                <p className="font-body text-sm text-[#A85A00]">
-                  Amostra insuficiente. Jogue mais treinos para liberar notas confiáveis (mínimo de{' '}
-                  {MIN_MATCHES_FOR_STATS} partidas).
-                </p>
-              </div>
-            ) : (
-              <div className="mt-4 flex flex-wrap gap-2">
-                <StatBadge value={student.wins} label="Vitórias" tone="win" />
-                <StatBadge value={student.losses} label="Derrotas" tone="loss" />
-                <StatBadge value={student.total_matches} label="Partidas" tone="bal" />
-              </div>
-            )}
-
-            <Button
-              variant="secondary"
-              full
-              className="mt-4"
-              onClick={() => navigate(`/share?student=${student.id}`)}
-            >
-              <Share2 size={18} /> Compartilhar card
-            </Button>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <Sheet open={confirmDelete} onClose={() => setConfirmDelete(false)} title="Excluir aluno?">
         <p className="mb-5 font-body text-sm text-fg-2">
