@@ -76,7 +76,7 @@ export default function Home() {
       />
 
       {/* Body */}
-      <div className="flex-1 px-[18px] pb-[120px]">
+      <div className="flex-1 px-[18px] pb-[calc(var(--bottom-nav-h)+150px)]">
         {visible.length === 0 ? (
           <EmptyState
             icon={HomeIcon}
@@ -140,8 +140,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* CTA Dock */}
-      <div className="sticky bottom-0 z-20 bg-gradient-to-t from-app from-60% to-transparent px-[18px] pb-[14px] pt-[14px]">
+      {/* CTA Dock — fixed above BottomNav */}
+      <div className="fixed bottom-[var(--bottom-nav-h)] left-1/2 z-30 w-full max-w-[440px] -translate-x-1/2 bg-gradient-to-t from-app from-60% to-transparent px-[18px] pb-[14px] pt-[14px]">
         <Button
           size="lg"
           full

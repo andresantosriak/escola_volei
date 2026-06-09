@@ -109,7 +109,7 @@ export default function BranchDetail() {
         right={headerRight}
       />
 
-      <div className="px-[18px] pb-8">
+      <div className="px-[18px] pb-[calc(var(--bottom-nav-h)+24px)]">
         {editing ? (
           /* ---- EDIT / NEW MODE ---- */
           <form onSubmit={handleSubmit(onSubmit)} noValidate>

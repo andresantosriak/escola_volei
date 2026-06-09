@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { ChevronLeft, Check, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronLeft, Check, ArrowRight, ChevronDown, ChevronUp, Home } from 'lucide-react'
 import { FullPageSpinner } from '@/components/ui/spinner'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/input'
@@ -19,7 +19,7 @@ interface DraftState {
 
 export default function EvaluatePlayer() {
   const navigate = useNavigate()
-  const { sessionId, present, teamName } = useTraining()
+  const { sessionId, present, teamName, reset } = useTraining()
   const { data: skillConfigs, isLoading } = useSkillsConfig()
   const { save } = useEvaluationMutations()
 
@@ -59,6 +59,7 @@ export default function EvaluatePlayer() {
   const d = getDraft(player.id)
   const origLevel = (key: string) => player.skills[key] ?? 3
   const hasNext = currentIdx < present.length - 1 && present.some((p, i) => i > currentIdx && !saved.has(p.id))
+  const allSaved = present.length > 0 && present.every((p) => saved.has(p.id))
 
   const saveOne = async (advance: boolean) => {
     try {
@@ -116,7 +117,7 @@ export default function EvaluatePlayer() {
       </header>
 
       {/* ---- Body ---- */}
-      <div className="flex-1 overflow-auto px-[18px] pb-[150px] pt-1">
+      <div className="flex-1 overflow-auto px-[18px] pb-[calc(var(--bottom-nav-h)+150px)] pt-1">
         {/* Fundamentos tecnicos */}
         <div className="mb-2 flex items-baseline justify-between">
           <span className="font-display text-[13px] font-extrabold text-fg-1">
@@ -224,8 +225,13 @@ export default function EvaluatePlayer() {
       </div>
 
       {/* ---- Bottom dock ---- */}
-      <div className="fixed inset-x-0 bottom-0 z-30 mx-auto max-w-[440px] border-t border-border-1 bg-surface/95 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur">
-        {hasNext ? (
+      <div className="fixed inset-x-0 bottom-[var(--bottom-nav-h)] z-30 mx-auto max-w-[440px] border-t border-border-1 bg-surface/95 p-4 pb-4 backdrop-blur">
+        {allSaved ? (
+          <Button size="lg" full onClick={() => { reset(); navigate('/') }}>
+            <Home size={18} />
+            Concluir — voltar ao in&iacute;cio
+          </Button>
+        ) : hasNext ? (
           <div className="flex gap-2.5">
             <Button variant="secondary" full onClick={() => saveOne(false)} disabled={save.isPending}>
               <Check size={18} />

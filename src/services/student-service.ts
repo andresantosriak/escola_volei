@@ -2,6 +2,8 @@ import { supabase } from '@/integrations/supabase/client'
 import { storageService } from '@/services/storage-service'
 import type { Student } from '@/types/domain'
 import type { StudentInput } from '@/schemas/student-schema'
+import type { TrainingPlayer } from '@/contexts/training-context'
+import type { EnginePosition } from '@/engine'
 
 export interface StudentListItem extends Student {
   overall: number
@@ -19,7 +21,7 @@ export interface StudentFull extends Student {
 
 const studentColumns = `id, coach_id, name, position, alternate_positions, age, height_cm,
   dominant_hand, photo_path, guardian_name, guardian_phone, notes, parental_consent,
-  created_at, updated_at`
+  is_guest, created_at, updated_at`
 
 function splitInput(input: StudentInput) {
   const { team_ids, ...fields } = input
@@ -47,6 +49,7 @@ export const studentService = {
     const { data, error } = await supabase
       .from('students')
       .select(studentColumns)
+      .eq('is_guest', false)
       .order('name', { ascending: true })
     if (error) throw new Error(error.message)
     return attachOverall(data as Student[])
@@ -99,11 +102,11 @@ export const studentService = {
   },
 
   /**
-   * Carrega overall + skills de vários alunos em LOTE (2 queries totais, não 6×N).
+   * Carrega overall + skills + isGuest de vários alunos em LOTE (2 queries totais, não 6×N).
    * Usado na chamada → montar times para evitar N+1 sequencial (era studentService.get por aluno).
    */
-  async enginePlayers(students: Student[]): Promise<Map<string, { overall: number; skills: Record<string, number> }>> {
-    const map = new Map<string, { overall: number; skills: Record<string, number> }>()
+  async enginePlayers(students: Student[]): Promise<Map<string, { overall: number; skills: Record<string, number>; isGuest: boolean }>> {
+    const map = new Map<string, { overall: number; skills: Record<string, number>; isGuest: boolean }>()
     if (students.length === 0) return map
     const ids = students.map((s) => s.id)
 
@@ -113,7 +116,9 @@ export const studentService = {
     ])
 
     const overallById = new Map((overallRes.data ?? []).map((r) => [r.student_id, r.overall_rating]))
-    for (const id of ids) map.set(id, { overall: overallById.get(id) ?? 73, skills: {} })
+    for (const s of students) {
+      map.set(s.id, { overall: overallById.get(s.id) ?? 73, skills: {}, isGuest: s.is_guest })
+    }
     for (const row of skillsRes.data ?? []) {
       const entry = map.get(row.student_id)
       if (entry) entry.skills[row.skill_key] = row.value
@@ -145,6 +150,56 @@ export const studentService = {
   async remove(id: string): Promise<void> {
     const { error } = await supabase.from('students').delete().eq('id', id)
     if (error) throw new Error(error.message)
+  },
+
+  /**
+   * Cria um convidado (guest) com is_guest=true e student_skills preenchidos
+   * para cada fundamento técnico ativo (assim o overall reflete o nível informado).
+   * Retorna um TrainingPlayer pronto para uso no fluxo de chamada/montagem.
+   */
+  async createGuest({ name, position, level }: { name: string; position: string; level: number }): Promise<TrainingPlayer> {
+    // 1. Buscar fundamentos técnicos ativos
+    const { data: skills, error: skillsErr } = await supabase
+      .from('skill_configs')
+      .select('key')
+      .eq('kind', 'technical')
+      .eq('active', true)
+    if (skillsErr) throw new Error(skillsErr.message)
+    const activeKeys = (skills ?? []).map((s) => s.key)
+
+    // 2. Criar student com is_guest=true
+    const { data: student, error: studentErr } = await supabase
+      .from('students')
+      .insert({ name, position: position || '', is_guest: true })
+      .select('id, name, position, alternate_positions')
+      .single()
+    if (studentErr) throw new Error(studentErr.message)
+
+    // 3. Criar student_skills com value=level para cada fundamento técnico ativo
+    if (activeKeys.length > 0) {
+      const rows = activeKeys.map((key) => ({ student_id: student.id, skill_key: key, value: level }))
+      const { error: insertErr } = await supabase.from('student_skills').insert(rows)
+      if (insertErr) {
+        // rollback: remove o convidado órfão p/ não deixar aluno sem skills
+        await supabase.from('students').delete().eq('id', student.id)
+        throw new Error(insertErr.message)
+      }
+    }
+
+    // 4. Montar skills map e calcular overall (mesma fórmula da view v_student_overall)
+    const skillsMap: Record<string, number> = {}
+    for (const key of activeKeys) skillsMap[key] = level
+    const overall = Math.round(48 + ((level - 1) / 4) * 50)
+
+    return {
+      id: student.id,
+      name: student.name,
+      position: (student.position || '') as EnginePosition,
+      alternatePositions: [],
+      isGuest: true,
+      skills: skillsMap,
+      overall,
+    }
   },
 }
 

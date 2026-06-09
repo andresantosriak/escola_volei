@@ -94,7 +94,7 @@ export default function ShareCard() {
     <div className="flex min-h-dvh flex-col bg-app">
       <ScreenHeader title="Compartilhar" back />
 
-      <div className="flex-1 overflow-y-auto pb-28">
+      <div className="flex-1 overflow-y-auto pb-[calc(var(--bottom-nav-h)+112px)]">
         {/* ---- Preview area ---- */}
         <div className="flex min-h-[320px] items-center justify-center bg-sunken px-[18px] py-4">
           <div className="overflow-hidden rounded-[22px]" style={{ boxShadow: 'var(--shadow-card)' }}>
@@ -149,7 +149,7 @@ export default function ShareCard() {
       </div>
 
       {/* ---- Bottom dock ---- */}
-      <div className="fixed inset-x-0 bottom-0 z-30 mx-auto flex max-w-[440px] gap-[10px] border-t border-border-1 bg-surface/95 px-[18px] py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur">
+      <div className="fixed inset-x-0 bottom-[var(--bottom-nav-h)] z-30 mx-auto flex max-w-[440px] gap-[10px] border-t border-border-1 bg-surface/95 px-[18px] py-4 pb-4 backdrop-blur">
         <Button variant="secondary" full onClick={onDownload} disabled={generating}>
           <Download size={18} /> Salvar
         </Button>

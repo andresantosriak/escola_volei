@@ -10,22 +10,18 @@ import { Sheet } from '@/components/ui/sheet'
 import { Input } from '@/components/ui/input'
 import { Segmented } from '@/components/ui/tabs'
 import { useSkillsConfig, useSkillsConfigMutations } from '@/hooks/use-skills-config'
+import { useSettings, useSettingsMutations } from '@/hooks/use-settings'
 import { skillsConfigService } from '@/services/skills-config-service'
 import type { SkillConfig } from '@/types/domain'
-
-const SCALE_OPTIONS = [
-  { value: '3', label: '1 a 3' },
-  { value: '5', label: '1 a 5' },
-  { value: '10', label: '1 a 10' },
-]
 
 export default function Skills() {
   const { data: skills, isLoading } = useSkillsConfig()
   const { create, update } = useSkillsConfigMutations()
+  const { data: settings, isLoading: settingsLoading } = useSettings()
+  const { update: updateSettings } = useSettingsMutations()
   const qc = useQueryClient()
 
-  const [showWeights, setShowWeights] = useState(false)
-  const [scale, setScale] = useState('5')
+  const showWeights = settings?.show_weights ?? false
   const [addOpen, setAddOpen] = useState(false)
   const [newLabel, setNewLabel] = useState('')
   const [newKind, setNewKind] = useState<'technical' | 'soft'>('technical')
@@ -33,7 +29,7 @@ export default function Skills() {
   const technical = useMemo(() => (skills ?? []).filter((s) => s.kind === 'technical'), [skills])
   const soft = useMemo(() => (skills ?? []).filter((s) => s.kind === 'soft'), [skills])
 
-  if (isLoading) return <FullPageSpinner label="Carregando fundamentos..." />
+  if (isLoading || settingsLoading) return <FullPageSpinner label="Carregando fundamentos..." />
 
   const toggleActive = (s: SkillConfig) => {
     const sameKindActive = (s.kind === 'technical' ? technical : soft).filter((x) => x.active)
@@ -127,6 +123,7 @@ export default function Skills() {
             step={0.1}
             value={s.weight}
             onChange={(e) => changeWeight(s, Number(e.target.value))}
+            aria-label={`Peso do fundamento ${s.label}`}
             className="flex-1 accent-green-500"
           />
           <span className="w-8 text-right font-num text-[13px] font-bold tabular-nums">
@@ -150,7 +147,7 @@ export default function Skills() {
             </span>
             <Switch
               checked={showWeights}
-              onCheckedChange={setShowWeights}
+              onCheckedChange={(v) => updateSettings.mutate({ show_weights: v })}
               aria-label="Mostrar pesos"
             />
           </span>
@@ -170,7 +167,7 @@ export default function Skills() {
         back
       />
 
-      <div className="space-y-0 px-[18px] pb-8 pt-1">
+      <div className="space-y-0 px-[18px] pb-[calc(var(--bottom-nav-h)+24px)] pt-1">
         {/* Info card */}
         <div className="mb-[6px] flex gap-[10px] rounded-[14px] bg-surface p-[13px_15px] shadow-sm">
           <Info size={18} className="mt-0.5 shrink-0 text-green-600" />
@@ -178,16 +175,6 @@ export default function Skills() {
             Define o que aparece na <b>Avaliação rápida</b> e o que entra no cálculo de{' '}
             <b>equilíbrio dos times</b>.
           </p>
-        </div>
-
-        {/* Scale selector */}
-        <div className="mt-[22px] px-1">
-          <span className="font-body text-[11px] font-bold uppercase tracking-[0.05em] text-fg-3">
-            Escala de avaliação
-          </span>
-        </div>
-        <div className="mt-[9px]">
-          <Segmented options={SCALE_OPTIONS} value={scale} onChange={setScale} />
         </div>
 
         {/* Technical skills */}

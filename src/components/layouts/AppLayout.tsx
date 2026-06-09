@@ -12,13 +12,14 @@ export function AppLayout() {
   )
 }
 
-/** Layout sem BottomNav — usado no fluxo de treino (foco total) */
+/** Layout de foco — agora também exibe BottomNav (fixed) */
 export function FocusLayout() {
   return (
     <div className="mx-auto flex min-h-dvh max-w-[440px] flex-col bg-app">
       <main className="flex-1">
         <Outlet />
       </main>
+      <BottomNav />
     </div>
   )
 }

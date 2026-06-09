@@ -10,6 +10,8 @@ export interface EnginePlayer {
   overall: number
   /** fundamentos técnicos (key -> valor 1-5) usados no cálculo de equilíbrio por fundamento */
   skills: Record<string, number>
+  /** true para convidados (guest players) adicionados na chamada */
+  isGuest?: boolean
 }
 
 export type AssemblyMode = 'competitive' | 'development'
@@ -29,6 +31,8 @@ export interface BuildOptions {
   benchPolicy?: BenchPolicy
   /** semente para RNG determinística (testes/reprodutibilidade) */
   seed?: number
+  /** pesos por fundamento técnico ativo (key -> peso 0.5..2.0). Se omitido, peso 1 para todos. */
+  skillWeights?: Record<string, number>
 }
 
 export type Tier = 'topo' | 'meio' | 'base'

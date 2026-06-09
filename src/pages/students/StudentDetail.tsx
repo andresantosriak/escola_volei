@@ -209,7 +209,7 @@ export default function StudentDetail() {
           </div>
 
           {/* Light content area */}
-          <div className="px-[18px] pt-[18px] pb-6">
+          <div className="px-[18px] pt-[18px] pb-[calc(var(--bottom-nav-h)+24px)]">
             {insufficient ? (
               <div className="flex items-start gap-3 rounded-[18px] bg-surface p-4 shadow-sm">
                 <TriangleAlert size={20} className="mt-0.5 shrink-0 text-warn" />
@@ -278,7 +278,7 @@ export default function StudentDetail() {
 
       {/* ---- Dados tab (or new student) ---- */}
       {(isNew || tab === TAB_DADOS) && (
-        <div className="px-[18px] pt-[18px] pb-6">
+        <div className="px-[18px] pt-[18px] pb-[calc(var(--bottom-nav-h)+24px)]">
           {/* Avatar + change photo */}
           {!isNew && student && (
             <div className="mb-5 flex items-center gap-[14px]">

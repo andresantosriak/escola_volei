@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Shuffle, Flag } from 'lucide-react'
 import { ScreenHeader } from '@/components/layouts/ScreenHeader'
@@ -10,13 +10,24 @@ import { TeamPanel } from '@/components/training/TeamPanel'
 import { BalanceIndicator } from '@/components/training/BalanceIndicator'
 import { useTeamBuilder } from '@/hooks/use-team-builder'
 import { useTraining } from '@/contexts/training-context'
+import { useActiveTechnicalSkills } from '@/hooks/use-skills-config'
 import { firstName } from '@/lib/format'
 import type { AssemblyMode, BenchPolicy } from '@/engine'
 
 export default function BuildTeams() {
   const navigate = useNavigate()
   const { teamId, present, setResult: persistResult } = useTraining()
-  const { result, build, swapPlayer } = useTeamBuilder(present)
+  const { data: activeSkills } = useActiveTechnicalSkills()
+
+  // Montar skillWeights a partir dos fundamentos tecnicos ativos: { key: weight }
+  const skillWeights = useMemo(() => {
+    if (!activeSkills || activeSkills.length === 0) return undefined
+    const w: Record<string, number> = {}
+    for (const s of activeSkills) w[s.key] = s.weight
+    return w
+  }, [activeSkills])
+
+  const { result, build, swapPlayer } = useTeamBuilder(present, skillWeights)
   const [mode, setMode] = useState<AssemblyMode>('competitive')
   const [size, setSize] = useState(6)
   const [benchPolicy, setBenchPolicy] = useState<BenchPolicy>('bench')
@@ -61,7 +72,7 @@ export default function BuildTeams() {
         }
       />
 
-      <div className="px-[18px] pb-36 pt-1">
+      <div className="px-[18px] pb-[calc(var(--bottom-nav-h)+144px)] pt-1">
         {/* Build options card */}
         <BuildOptions
           mode={mode}
@@ -131,7 +142,7 @@ export default function BuildTeams() {
       </div>
 
       {/* Bottom dock */}
-      <div className="fixed inset-x-0 bottom-0 z-20 px-[18px] pb-[calc(14px+env(safe-area-inset-bottom))] pt-[14px]"
+      <div className="fixed inset-x-0 bottom-[var(--bottom-nav-h)] z-30 px-[18px] pb-[14px] pt-[14px]"
         style={{ background: 'linear-gradient(to top, var(--color-app) 62%, transparent)' }}
       >
         <div className="mx-auto max-w-[440px]">

@@ -7,6 +7,7 @@ export interface SettingsUpdate {
   assembly_mode?: 'competitive' | 'development'
   bench_policy?: 'bench' | 'rotation'
   theme?: 'light' | 'dark' | 'system'
+  show_weights?: boolean
 }
 
 export const settingsService = {

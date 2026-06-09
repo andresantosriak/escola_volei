@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Home, History, Users, Menu } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { cn } from '@/lib/utils'
@@ -10,8 +11,27 @@ const TABS = [
 ]
 
 export function BottomNav() {
+  const ref = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const apply = () =>
+      document.documentElement.style.setProperty(
+        '--bottom-nav-h',
+        el.offsetHeight + 'px',
+      )
+    apply()
+    const ro = new ResizeObserver(apply)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
   return (
-    <nav className="sticky bottom-0 z-30 flex border-t border-border-1 bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
+    <nav
+      ref={ref}
+      className="fixed bottom-0 left-1/2 z-40 flex w-full max-w-[440px] -translate-x-1/2 border-t border-border-1 bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
+    >
       {TABS.map(({ to, icon: Icon, label, end }) => (
         <NavLink
           key={to}

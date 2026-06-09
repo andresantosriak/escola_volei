@@ -287,7 +287,7 @@ function EvaluationsOverlay({ match, onBack, onEvaluate }: EvalOverlayProps) {
         onBack={onBack}
       />
 
-      <div className="flex-1 overflow-auto px-[18px] pb-28" style={{ paddingTop: 4 }}>
+      <div className="flex-1 overflow-auto px-[18px] pb-[calc(var(--bottom-nav-h)+150px)]" style={{ paddingTop: 4 }}>
         {/* match context card */}
         <div className="flex items-center gap-3 rounded-[16px] bg-surface p-3 shadow-sm">
           <div
@@ -392,7 +392,7 @@ function EvaluationsOverlay({ match, onBack, onEvaluate }: EvalOverlayProps) {
 
       {/* sticky bottom CTA */}
       <div
-        className="fixed inset-x-0 bottom-0 z-10 bg-app px-[18px] pb-6 pt-3"
+        className="fixed inset-x-0 bottom-[var(--bottom-nav-h)] z-30 mx-auto max-w-[440px] bg-app px-[18px] pb-6 pt-3"
         style={{ boxShadow: '0 -4px 12px rgba(0,0,0,0.06)' }}
       >
         <Button
@@ -469,7 +469,7 @@ export default function MatchDetail() {
         }
       />
 
-      <div className="space-y-4 px-[18px] pb-8" style={{ paddingTop: 4 }}>
+      <div className="space-y-4 px-[18px] pb-[calc(var(--bottom-nav-h)+24px)]" style={{ paddingTop: 4 }}>
         {/* Result hero card */}
         <div className="rounded-[16px] bg-surface p-4 shadow-md">
           {/* Date / class label */}

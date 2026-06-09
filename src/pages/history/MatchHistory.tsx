@@ -124,7 +124,7 @@ export default function MatchHistory() {
       )}
 
       {/* Content area */}
-      <div style={{ padding: '14px 18px 120px' }}>
+      <div style={{ padding: '14px 18px calc(var(--bottom-nav-h) + 24px)' }}>
         {isLoading && <FullPageSpinner label="Carregando historico..." />}
 
         {isError && (

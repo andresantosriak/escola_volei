@@ -58,7 +58,7 @@ export default function Classes() {
         </div>
       )}
 
-      <div className="px-[18px] pt-3.5 pb-6">
+      <div className="px-[18px] pt-3.5 pb-[calc(var(--bottom-nav-h)+24px)]">
         {isLoading && <FullPageSpinner label="Carregando turmas..." />}
         {isError && (
           <p className="py-8 text-center text-sm text-loss">

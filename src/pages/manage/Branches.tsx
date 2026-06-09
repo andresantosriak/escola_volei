@@ -24,7 +24,7 @@ export default function Branches() {
           />
         }
       />
-      <div className="px-[18px] pt-1 pb-6">
+      <div className="px-[18px] pt-1 pb-[calc(var(--bottom-nav-h)+24px)]">
         {isLoading && <FullPageSpinner label="Carregando filiais…" />}
         {isError && <p className="py-8 text-center text-sm text-loss">Erro ao carregar filiais.</p>}
         {branches && branches.length === 0 && (

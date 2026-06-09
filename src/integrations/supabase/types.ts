@@ -380,6 +380,7 @@ export type Database = {
           created_at: string
           height_unit: string
           id: string
+          show_weights: boolean
           team_size: string
           theme: string
           updated_at: string
@@ -391,6 +392,7 @@ export type Database = {
           created_at?: string
           height_unit?: string
           id?: string
+          show_weights?: boolean
           team_size?: string
           theme?: string
           updated_at?: string
@@ -402,6 +404,7 @@ export type Database = {
           created_at?: string
           height_unit?: string
           id?: string
+          show_weights?: boolean
           team_size?: string
           theme?: string
           updated_at?: string
@@ -523,6 +526,7 @@ export type Database = {
           guardian_phone: string
           height_cm: number | null
           id: string
+          is_guest: boolean
           name: string
           notes: string
           parental_consent: boolean
@@ -540,6 +544,7 @@ export type Database = {
           guardian_phone?: string
           height_cm?: number | null
           id?: string
+          is_guest?: boolean
           name: string
           notes?: string
           parental_consent?: boolean
@@ -557,6 +562,7 @@ export type Database = {
           guardian_phone?: string
           height_cm?: number | null
           id?: string
+          is_guest?: boolean
           name?: string
           notes?: string
           parental_consent?: boolean

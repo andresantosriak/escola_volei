@@ -82,7 +82,7 @@ export default function Settings() {
     <>
       <ScreenHeader title="Configurações" subtitle="Conta e preferências" back />
 
-      <div className="px-[18px] pb-8" style={{ paddingTop: 4 }}>
+      <div className="px-[18px] pb-[calc(var(--bottom-nav-h)+24px)]" style={{ paddingTop: 4 }}>
         {/* ── CONTA ── */}
         <GroupLabel>Conta</GroupLabel>
         <div className="overflow-hidden rounded-[14px] shadow-sm">

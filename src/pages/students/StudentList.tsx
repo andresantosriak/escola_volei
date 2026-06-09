@@ -84,7 +84,7 @@ export default function StudentList() {
       </div>
 
       {/* Content */}
-      <div className="px-[18px] pb-[120px] pt-3">
+      <div className="px-[18px] pb-[calc(var(--bottom-nav-h)+24px)] pt-3">
         {isLoading && <FullPageSpinner label="Carregando alunos…" />}
         {isError && (
           <p className="py-8 text-center text-sm text-loss">Erro ao carregar alunos.</p>
@@ -117,7 +117,7 @@ export default function StudentList() {
                   <Avatar name={s.name} size={40} />
                   <div className="min-w-0 flex-1">
                     <div className="truncate font-body text-[15px] font-bold text-fg-1">
-                      {s.name}
+                      {s.name || 'Sem nome'}
                     </div>
                     <div className="text-[11.5px] text-fg-4">{meta}</div>
                   </div>

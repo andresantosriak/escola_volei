@@ -116,6 +116,7 @@
 
 /* ---- Role tokens: LIGHT (exatos do DS) ---- */
 :root {
+  --bottom-nav-h: calc(56px + env(safe-area-inset-bottom));
   --app: #f4f6fb; /* gray-50 / bg-app */
   --surface: #ffffff; /* gray-0 / bg-surface */
   --surface-2: #f4f6fb;

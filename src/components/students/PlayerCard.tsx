@@ -86,7 +86,7 @@ export function PlayerCard({ player }: { player: PlayerCardData }) {
 
       {/* name + meta */}
       <div className="relative text-center font-display font-extrabold" style={{ fontSize: 22 }}>
-        {player.name}
+        {player.name || 'Sem nome'}
       </div>
       <div
         className="relative text-center"

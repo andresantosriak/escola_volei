@@ -114,7 +114,7 @@ export default function ClassDetail() {
         right={headerRight}
       />
 
-      <div className="px-[18px] pb-32 pt-1">
+      <div className="px-[18px] pb-[calc(var(--bottom-nav-h)+24px)] pt-1">
         {editing ? (
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Field label="Nome da turma *" error={errors.name?.message}>

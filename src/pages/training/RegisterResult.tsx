@@ -142,7 +142,7 @@ export default function RegisterResult() {
         onBack={() => navigate('/training/teams')}
       />
 
-      <div className="space-y-0 px-[18px] pb-[200px]">
+      <div className="space-y-0 px-[18px] pb-[calc(var(--bottom-nav-h)+200px)]">
         {/* ---- Score banner ---- */}
         <div
           className="flex items-center justify-between gap-2 rounded-[18px] bg-surface px-4 py-[14px] shadow-sm"
@@ -270,7 +270,7 @@ export default function RegisterResult() {
       </div>
 
       {/* ---- Dock ---- */}
-      <div className="fixed inset-x-0 bottom-0 z-30 mx-auto flex max-w-[440px] flex-col gap-[10px] bg-surface/95 px-[18px] pt-[14px] pb-[calc(14px+env(safe-area-inset-bottom))] backdrop-blur">
+      <div className="fixed inset-x-0 bottom-[var(--bottom-nav-h)] z-30 mx-auto flex max-w-[440px] flex-col gap-[10px] bg-surface/95 px-[18px] pt-[14px] pb-[14px] backdrop-blur">
         <Button
           full
           size="lg"

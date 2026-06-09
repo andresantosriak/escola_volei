@@ -48,6 +48,11 @@ export function TeamPanel({ side, name, onRename, team, onPlayerTap }: TeamPanel
           >
             <Avatar name={p.name} size={28} />
             <span className="flex-1 truncate font-body text-sm">{firstName(p.name)}</span>
+            {p.isGuest && (
+              <span className="rounded-full bg-yellow-400/60 px-1.5 py-0.5 text-[9px] font-bold text-ink-900">
+                Conv.
+              </span>
+            )}
             {p.position === 'LEV' && (
               <span className="rounded-full bg-yellow-400 px-1.5 py-0.5 text-[9px] font-bold text-ink-900">
                 LEV

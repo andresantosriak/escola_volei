@@ -55,7 +55,7 @@ export default function Menu() {
       <ScreenHeader title="Menu" subtitle="Gerenciamento" brand />
 
       {/* List body — matches mockup er-body paddingTop 4 + er-list gap 9 */}
-      <div className="flex flex-col gap-[9px] px-[18px] pt-1 pb-[120px]">
+      <div className="flex flex-col gap-[9px] px-[18px] pt-1 pb-[calc(var(--bottom-nav-h)+24px)]">
         {items.map(({ to, icon, title, subtitle }) => (
           <ListRow
             key={to}

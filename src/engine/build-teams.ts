@@ -105,13 +105,16 @@ export function buildTeams(present: EnginePlayer[], opts: BuildOptions): BuildRe
   const benchPolicy = opts.benchPolicy ?? 'bench'
   const rng = makeRng(opts.seed ?? 0x9e3779b9)
 
+  const skillWeights = opts.skillWeights
+  const balOpts = skillWeights ? { skillWeights } : undefined
+
   const { playing, bench, perTeam } = selectPlaying(present, size, benchPolicy, rng)
   const tm = tierMap(present)
   const bothTiers =
     playing.some((p) => tm[p.id] === 'topo') && playing.some((p) => tm[p.id] === 'base')
 
   const evaluate = (t1: EnginePlayer[], t2: EnginePlayer[]): number => {
-    const bal = balanceScore(t1, t2)
+    const bal = balanceScore(t1, t2, balOpts)
     if (mode === 'development') {
       const mixed = !bothTiers || isMixed(t1, t2, tm)
       return (mixed ? 1000 : 0) + bal
@@ -163,7 +166,7 @@ export function buildTeams(present: EnginePlayer[], opts: BuildOptions): BuildRe
     teamB: t2,
     bench,
     perTeam,
-    score: balanceScore(t1, t2),
+    score: balanceScore(t1, t2, balOpts),
     mode,
     size,
     mixed,
