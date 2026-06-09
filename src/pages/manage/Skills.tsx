@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { GripVertical, Info, Plus } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -22,6 +22,13 @@ export default function Skills() {
   const qc = useQueryClient()
 
   const showWeights = settings?.show_weights ?? false
+
+  /* ── Local draft state for weight sliders (smooth drag) ── */
+  const [weightDraft, setWeightDraft] = useState<Record<string, number>>({})
+  const saveTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({})
+  useEffect(() => () => Object.values(saveTimers.current).forEach(clearTimeout), [])
+  const weightOf = (s: SkillConfig) => weightDraft[s.id] ?? Number(s.weight)
+
   const [addOpen, setAddOpen] = useState(false)
   const [newLabel, setNewLabel] = useState('')
   const [newKind, setNewKind] = useState<'technical' | 'soft'>('technical')
@@ -40,8 +47,14 @@ export default function Skills() {
     update.mutate({ id: s.id, patch: { active: !s.active } })
   }
 
-  const changeWeight = (s: SkillConfig, weight: number) =>
-    update.mutate({ id: s.id, patch: { weight } })
+  const changeWeight = (s: SkillConfig, weight: number) => {
+    setWeightDraft((prev) => ({ ...prev, [s.id]: weight }))
+    clearTimeout(saveTimers.current[s.id])
+    saveTimers.current[s.id] = setTimeout(
+      () => update.mutate({ id: s.id, patch: { weight } }),
+      350,
+    )
+  }
 
   const move = async (list: SkillConfig[], idx: number, dir: -1 | 1) => {
     const target = idx + dir
@@ -100,7 +113,7 @@ export default function Skills() {
         {/* Weight badge */}
         {showWeights && s.active && (
           <span className="rounded-full bg-green-50 px-2 py-0.5 font-body text-[11px] font-bold text-green-600">
-            x{Number(s.weight).toFixed(1)}
+            x{weightOf(s).toFixed(1)}
           </span>
         )}
 
@@ -121,13 +134,13 @@ export default function Skills() {
             min={0.5}
             max={2}
             step={0.1}
-            value={s.weight}
+            value={weightOf(s)}
             onChange={(e) => changeWeight(s, Number(e.target.value))}
             aria-label={`Peso do fundamento ${s.label}`}
             className="flex-1 accent-green-500"
           />
           <span className="w-8 text-right font-num text-[13px] font-bold tabular-nums">
-            {Number(s.weight).toFixed(1)}
+            {weightOf(s).toFixed(1)}
           </span>
         </div>
       )}
