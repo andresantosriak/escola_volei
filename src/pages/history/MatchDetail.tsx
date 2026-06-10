@@ -15,6 +15,7 @@ import {
   TrendingUp,
   Volleyball,
 } from 'lucide-react'
+import { flushSync } from 'react-dom'
 import { ScreenHeader } from '@/components/layouts/ScreenHeader'
 import { IconButton } from '@/components/layouts/IconButton'
 import { FullPageSpinner } from '@/components/ui/spinner'
@@ -24,8 +25,12 @@ import { Avatar } from '@/components/students/Avatar'
 import { StatBadge } from '@/components/students/StatBadge'
 import { useMatch, useMatchMutations } from '@/hooks/use-matches'
 import { useSessionEvaluations } from '@/hooks/use-evaluations'
+import { useTraining } from '@/contexts/training-context'
+import { studentService } from '@/services/student-service'
 import { formatMatchCardDate } from '@/lib/format'
 import type { Student } from '@/types/domain'
+import type { TrainingPlayer } from '@/contexts/training-context'
+import type { EnginePosition } from '@/engine'
 
 /* ================================================================
    Sub-components for the match detail
@@ -250,21 +255,19 @@ interface EvalOverlayProps {
     winner: string | null
     rostersA: Student[]
     rostersB: Student[]
+    presentes: Student[]
   }
   onBack: () => void
   onEvaluate: (studentId: string) => void
+  onComplete: () => void
 }
 
-function EvaluationsOverlay({ match, onBack, onEvaluate }: EvalOverlayProps) {
+function EvaluationsOverlay({ match, onBack, onEvaluate, onComplete }: EvalOverlayProps) {
   const { data: evaluations } = useSessionEvaluations(match.session_id ?? undefined)
 
-  const allPlayers = [
-    ...match.rostersA.map((p) => ({ ...p, _side: 'a' as const })),
-    ...match.rostersB.map((p) => ({ ...p, _side: 'b' as const })),
-  ]
-  // deduplicate by id
+  // Presentes vindos da attendance (session-service), dedup por seguranca
   const seen = new Set<string>()
-  const presentes = allPlayers.filter((p) => {
+  const presentes = (match.presentes ?? []).filter((p) => {
     if (seen.has(p.id)) return false
     seen.add(p.id)
     return true
@@ -398,10 +401,7 @@ function EvaluationsOverlay({ match, onBack, onEvaluate }: EvalOverlayProps) {
         <Button
           size="lg"
           full
-          onClick={() => {
-            const first = presentes.find((p) => !evalMap.has(p.id))
-            if (first) onEvaluate(first.id)
-          }}
+          onClick={() => onComplete()}
         >
           <ClipboardCheck size={18} />
           Completar avaliacoes
@@ -420,6 +420,7 @@ export default function MatchDetail() {
   const navigate = useNavigate()
   const { data: match, isLoading } = useMatch(id)
   const { remove } = useMatchMutations()
+  const { startTraining, setSession } = useTraining()
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [showEvals, setShowEvals] = useState(false)
 
@@ -443,14 +444,43 @@ export default function MatchDetail() {
     }
   }
 
+  const startEvaluation = async (focusStudentId?: string) => {
+    if (!match.session_id || match.presentes.length === 0) {
+      toast.error('Sem presentes nesta sessao para avaliar.')
+      return
+    }
+    const stats = await studentService.enginePlayers(match.presentes as Student[])
+    const present: TrainingPlayer[] = match.presentes.map((s) => ({
+      id: s.id,
+      name: s.name,
+      position: (s.position || '') as EnginePosition,
+      alternatePositions: [] as EnginePosition[],
+      overall: stats.get(s.id)?.overall ?? 73,
+      skills: stats.get(s.id)?.skills ?? {},
+      isGuest: stats.get(s.id)?.isGuest ?? false,
+      photoUrl: null,
+    }))
+    if (focusStudentId) {
+      const idx = present.findIndex((p) => p.id === focusStudentId)
+      if (idx > 0) {
+        const [focused] = present.splice(idx, 1)
+        present.unshift(focused)
+      }
+    }
+    flushSync(() => {
+      startTraining(match.team_id, match.team_name ?? 'Treino')
+      setSession(match.session_id!, present)
+    })
+    navigate('/training/evaluate')
+  }
+
   if (showEvals) {
     return (
       <EvaluationsOverlay
         match={match}
         onBack={() => setShowEvals(false)}
-        onEvaluate={(studentId) => {
-          navigate(`/training/evaluate?session=${match.session_id}&student=${studentId}`)
-        }}
+        onEvaluate={(studentId) => startEvaluation(studentId)}
+        onComplete={() => startEvaluation()}
       />
     )
   }

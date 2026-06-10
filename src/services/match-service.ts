@@ -23,6 +23,7 @@ export interface MatchDetailData extends Match {
   sets: MatchSet[]
   rostersA: Student[]
   rostersB: Student[]
+  presentes: Student[]
   team_name: string | null
 }
 
@@ -116,9 +117,16 @@ export const matchService = {
       .single()
     if (error) throw new Error(error.message)
 
-    const [setsRes, rostersRes] = await Promise.all([
+    const [setsRes, rostersRes, attendanceRes] = await Promise.all([
       supabase.from('match_sets').select('*').eq('match_id', id).order('set_number'),
       supabase.from('match_rosters').select(`side, student:students(${studentCols})`).eq('match_id', id),
+      match.session_id
+        ? supabase
+            .from('attendances')
+            .select(`status, student:students(${studentCols})`)
+            .eq('session_id', match.session_id)
+            .in('status', ['present', 'late'])
+        : Promise.resolve({ data: [] as { status: string; student: Student | null }[] }),
     ])
 
     const rostersA: Student[] = []
@@ -130,8 +138,18 @@ export const matchService = {
       else rostersB.push(row.student)
     }
 
+    // Presentes da sessao (attendance) — deduplicados por id
+    const seenIds = new Set<string>()
+    const presentes: Student[] = []
+    for (const r of attendanceRes.data ?? []) {
+      const row = r as { status: string; student: Student | null }
+      if (!row.student || seenIds.has(row.student.id)) continue
+      seenIds.add(row.student.id)
+      presentes.push(row.student)
+    }
+
     const team_name = (match as { team?: { name?: string } | null }).team?.name ?? null
-    return { ...(match as Match), team_name, sets: setsRes.data ?? [], rostersA, rostersB }
+    return { ...(match as Match), team_name, sets: setsRes.data ?? [], rostersA, rostersB, presentes }
   },
 
   async remove(id: string): Promise<void> {
