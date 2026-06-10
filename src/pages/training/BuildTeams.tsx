@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { Shuffle, Flag } from 'lucide-react'
 import { ScreenHeader } from '@/components/layouts/ScreenHeader'
@@ -34,22 +35,23 @@ export default function BuildTeams() {
   const [nameA, setNameA] = useState('Furacao')
   const [nameB, setNameB] = useState('Tubaroes')
 
+  // Redireciona pra home só se NÃO há treino ativo (sem teamId). NÃO redireciona
+  // por present vazio: sob v7_startTransition esta rota pode renderizar antes do
+  // contexto propagar (present transitoriamente []).
   useEffect(() => {
-    if (!teamId || present.length < 4) {
-      navigate('/', { replace: true })
-      return
-    }
-    build({ mode, size, benchPolicy })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    if (!teamId) navigate('/', { replace: true })
+  }, [teamId, navigate])
 
+  // (Re)monta os times quando o elenco chega (>=4), quando as opções mudam, ou quando
+  // os pesos dos fundamentos terminam de carregar (skillWeights) — assim, em conexão/CPU
+  // lenta, o primeiro build (sem pesos) é refeito com os pesos aplicados.
   useEffect(() => {
     if (present.length >= 4) build({ mode, size, benchPolicy })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, size, benchPolicy])
+  }, [present.length, mode, size, benchPolicy, skillWeights])
 
   const goResult = () => {
-    persistResult(result)
+    flushSync(() => persistResult(result))
     navigate('/training/result')
   }
 

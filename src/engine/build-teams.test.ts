@@ -29,6 +29,30 @@ describe('buildTeams', () => {
     expect(r.bench.length).toBe(0)
   })
 
+  it('regressão NaN: jogadores SEM skills e SEM skillWeights não geram times vazios', () => {
+    // fundMax=0 -> 0/0=NaN no balanceScore -> best nunca setado -> teamA/teamB vazios.
+    const noSkills: EnginePlayer[] = Array.from({ length: 12 }, (_, i) => ({
+      id: `n${i}`,
+      name: `N${i}`,
+      position: i % 4 === 0 ? 'LEV' : 'PON',
+      alternatePositions: [],
+      overall: 73,
+      skills: {},
+    }))
+    const r = buildTeams(noSkills, { mode: 'competitive', size: 6, seed: 1 })
+    expect(r.teamA.length).toBe(6)
+    expect(r.teamB.length).toBe(6)
+    expect(Number.isNaN(r.score)).toBe(false)
+  })
+
+  it('balanceScore retorna número válido (não NaN) sem fundamentos em comum', () => {
+    const t1: EnginePlayer[] = [{ id: 'a', name: 'a', position: 'PON', alternatePositions: [], overall: 73, skills: {} }]
+    const t2: EnginePlayer[] = [{ id: 'b', name: 'b', position: 'PON', alternatePositions: [], overall: 73, skills: {} }]
+    const s = balanceScore(t1, t2)
+    expect(Number.isNaN(s)).toBe(false)
+    expect(s).toBeGreaterThanOrEqual(20)
+  })
+
   it('manda sobra (impar) para o banco', () => {
     const r = buildTeams(roster(5), { mode: 'competitive', size: 6, seed: 1 })
     expect(r.teamA.length).toBe(2)

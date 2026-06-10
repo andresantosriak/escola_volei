@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { ArrowRight, UserPlus, Users } from 'lucide-react'
@@ -140,7 +141,7 @@ export default function Attendance() {
         // Guests already have full TrainingPlayer data from createGuest
         ...playingGuests,
       ]
-      setSession(session.id, present)
+      flushSync(() => setSession(session.id, present))
       navigate('/training/teams')
     } catch (e) {
       toast.error((e as Error).message)

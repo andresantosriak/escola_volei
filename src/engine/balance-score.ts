@@ -98,7 +98,9 @@ export function balanceScore(
     fundDiff += Math.abs(s1[k] - s2[k]) * w
     fundMax += (s1[k] + s2[k] || 1) * w
   }
-  const fundTerm = fundDiff / fundMax
+  // Guard: sem fundamentos (keys vazias) ou somas zeradas, fundMax=0 -> evita 0/0=NaN.
+  // NaN propagaria pro score e faria buildTeams nunca setar `best` (times vazios).
+  const fundTerm = fundMax > 0 ? fundDiff / fundMax : 0
 
   // Force term (overall gap)
   const fTot = teamForce(t1) + teamForce(t2) || 1
