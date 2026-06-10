@@ -19,11 +19,13 @@ export const evaluationService = {
   /** Upsert da avaliação do aluno no treino + ajustes de fundamento (trigger atualiza snapshot). */
   async save(params: SaveEvaluationParams): Promise<Evaluation> {
     const { sessionId, studentId, engagement, notes, skills } = params
+    // clamp de segurança: o banco exige engagement entre 1 e 5 (CHECK). Qualquer 0/inválido vira 3 (neutro).
+    const safeEngagement = engagement >= 1 && engagement <= 5 ? engagement : 3
 
     const { data: evaluation, error } = await supabase
       .from('evaluations')
       .upsert(
-        { session_id: sessionId, student_id: studentId, engagement, notes },
+        { session_id: sessionId, student_id: studentId, engagement: safeEngagement, notes },
         { onConflict: 'session_id,student_id' },
       )
       .select()

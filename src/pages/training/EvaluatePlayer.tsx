@@ -50,7 +50,9 @@ export default function EvaluatePlayer() {
     for (const sc of [...technical, ...soft]) {
       skills[sc.key] = p?.skills[sc.key] ?? 3
     }
-    return { engagement: 0, notes: '', skills }
+    // engagement default 3 (neutro) — alinhado ao DEFAULT do banco e ao CHECK 1..5.
+    // (era 0, que violava evaluations_engagement_check ao salvar sem tocar na nota.)
+    return { engagement: 3, notes: '', skills }
   }
 
   const patchDraft = (id: string, patch: Partial<DraftState>) =>
